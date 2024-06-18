@@ -9,7 +9,8 @@ async function asyncFunction() {
       });
    
     try {
-     const res = await conn.query('select 1', [2]);
+      const a = await conn.query('use bq111967_bensweeneynl');
+     const res = await conn.query('select * from persons');
      console.log(res); // [{ "1": 1 }]
      return res;
     } finally {
