@@ -1,13 +1,13 @@
-# ENV.LOCAL example
+# Dev Setup
 
-REACT_APP_DB_PORT: 3306
-REACT_APP_DB_HOST: h30.mijn.host
-REACT_APP_DB_USER: 'myUser',
-REACT_APP_DB_PWD: 'myPwd'
+1. Copy .env.template and populate the variables.
 
+- To identify the hostname you can use the following command in the SQL client `SHOW VARIABLES WHERE Variable_name = 'hostname'`
+- To identify the port number you can use the folowing command in the SQL client `SHOW VARIABLES WHERE Variable_name = 'port'`
 
-The SQL query SHOW VARIABLES WHERE Variable_name = 'hostname' will show you the hostname of the MySQL server which you can easily resolve to its IP address.
+2. Run the following commands:
 
-SHOW VARIABLES WHERE Variable_name = 'port' Will give you the port number.
-
-You can find details about this in MySQL's manual: 12.4.5.41. SHOW VARIABLES Syntax and 5.1.4. Server System Variables
+```npm install
+npm run build
+npm run dev
+```
