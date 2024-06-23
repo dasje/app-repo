@@ -40,7 +40,7 @@ export async function createUser(user: NewUser) {
     .insertInto("users")
     .values(user)
     .executeTakeFirstOrThrow();
-
+  console.log("HEY", insertId);
   return await findUserById(Number(insertId!));
 }
 
