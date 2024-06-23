@@ -2,7 +2,7 @@ import "@/app/globals.css";
 
 import { Providers } from "./providers";
 import Header from "./components/layoutComponents/Header";
-import LoginOptions from "./LoginOptions";
+import LoginOptions from "./login/loginComponents/LoginOptions";
 
 export default function RootLayout({
   children,
@@ -14,7 +14,6 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          <LoginOptions choose="choose" />
           {children}
         </Providers>
       </body>

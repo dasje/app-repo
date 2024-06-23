@@ -35,10 +35,12 @@ const Header = () => {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <div>Login</div>
+          <Link href="/login/login">
+            <div>Login</div>
+          </Link>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
+          <Button as={Link} color="primary" href="/login/signup" variant="flat">
             Sign Up
           </Button>
         </NavbarItem>
