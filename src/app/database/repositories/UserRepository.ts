@@ -9,7 +9,7 @@ export async function findUserById(id: number) {
     .executeTakeFirst();
 }
 
-export async function findPeople(criteria: Partial<User>) {
+export async function findUser(criteria: Partial<User>) {
   let query = db.selectFrom("users");
 
   if (criteria.id) {
@@ -23,6 +23,7 @@ export async function findPeople(criteria: Partial<User>) {
   if (criteria.created_at) {
     query = query.where("created_at", "=", criteria.created_at);
   }
+
   if (criteria.login_at) {
     query = query.where("login_at", "=", criteria.login_at);
   }
