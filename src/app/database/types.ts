@@ -20,8 +20,8 @@ export interface UserTable {
   id: Generated<number>;
   email: string;
   password: string;
-  created_at: ColumnType<Date, string | undefined, never>;
-  login_at: ColumnType<Date, string | undefined, never>;
+  created_at: ColumnType<Date, string | undefined>;
+  login_at: ColumnType<Date, string | undefined>;
   ip: string | null;
 }
 export type User = Selectable<UserTable>;
