@@ -1,7 +1,7 @@
 import { db } from "@/app/database/database";
 import { App, NewApp, UpdateApp } from "@/app/database/types";
 
-export async function findAppById(id: number) {
+export async function findAppById(id: string) {
   return await db
     .selectFrom("apps")
     .where("id", "=", id)
@@ -35,20 +35,20 @@ export async function findApps(criteria: Partial<App>) {
   return await query.selectAll().execute();
 }
 
-export async function updateApp(id: number, updateWith: UpdateApp) {
+export async function updateApp(id: string, updateWith: UpdateApp) {
   await db.updateTable("apps").set(updateWith).where("id", "=", id).execute();
 }
 
-export async function createApp(user: NewApp) {
+export async function createApp(app: NewApp) {
   const { insertId } = await db
     .insertInto("apps")
-    .values(user)
+    .values(app)
     .executeTakeFirstOrThrow();
 
-  return await findAppById(Number(insertId!));
+  return await findApps({ app_name: app.app_name });
 }
 
-export async function deleteApp(id: number) {
+export async function deleteApp(id: string) {
   const app = await findAppById(id);
 
   if (app) {

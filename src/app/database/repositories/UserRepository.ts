@@ -19,8 +19,7 @@ export async function findUser(criteria: Partial<User>) {
   if (criteria.email) {
     query = query.where("email", "=", criteria.email);
   }
-  const x: User = await query.selectAll().executeTakeFirst();
-  return x;
+  return await query.selectAll().executeTakeFirst();
 }
 
 export async function updateUser(id: string, updateWith: UpdateUser) {

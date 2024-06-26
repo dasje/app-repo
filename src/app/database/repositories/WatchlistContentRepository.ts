@@ -5,7 +5,7 @@ import {
   WatchlistContent,
 } from "@/app/database/types";
 
-export async function findWatchlistContentById(id: number) {
+export async function findWatchlistContentById(id: string) {
   return await db
     .selectFrom("watchlist_content")
     .where("id", "=", id)
@@ -38,7 +38,7 @@ export async function findWatchlistContent(
 }
 
 export async function updateWatchlistContent(
-  id: number,
+  id: string,
   updateWith: UpdateWatchlistContent
 ) {
   await db
@@ -56,10 +56,13 @@ export async function createWatchlistContent(
     .values(watchlistContent)
     .executeTakeFirstOrThrow();
 
-  return await findWatchlistContentById(Number(insertId!));
+  return await findWatchlistContent({
+    watchlist_list_id: watchlistContent.watchlist_list_id,
+    media_name: watchlistContent.media_name,
+  });
 }
 
-export async function deleteUser(id: number) {
+export async function deleteUser(id: string) {
   const watchlistContent = await findWatchlistContentById(id);
 
   if (watchlistContent) {

@@ -7,12 +7,13 @@ import {
   Selectable,
   Updateable,
 } from "kysely";
+import { Database } from "@auth/kysely-adapter";
 
-export interface Database {
+export interface DB extends Database {
   User: UserTable;
-  Account: AccountTable;
-  Session: SessionTable;
-  VerificationToken: VerificationTokenTable;
+  //   Account: AccountTable;
+  //   Session: SessionTable;
+  //   VerificationToken: VerificationTokenTable;
   app_access: AppAccessTable;
   apps: AppTable;
   watchlist_lists: WatchlistListsTable;

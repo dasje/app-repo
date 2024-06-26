@@ -1,14 +1,7 @@
 import { db } from "@/app/database/database";
-import {
-  UpdateUser,
-  User,
-  NewUser,
-  AppAccess,
-  UpdateAppAccess,
-  NewAppAccess,
-} from "@/app/database/types";
+import { AppAccess, UpdateAppAccess, NewAppAccess } from "@/app/database/types";
 
-export async function findAppAccessById(id: number) {
+export async function findAppAccessById(id: string) {
   return await db
     .selectFrom("app_access")
     .where("id", "=", id)
@@ -34,7 +27,7 @@ export async function findAppAccess(criteria: Partial<AppAccess>) {
   return await query.selectAll().execute();
 }
 
-export async function updateAppAccess(id: number, updateWith: UpdateAppAccess) {
+export async function updateAppAccess(id: string, updateWith: UpdateAppAccess) {
   await db
     .updateTable("app_access")
     .set(updateWith)
@@ -42,16 +35,16 @@ export async function updateAppAccess(id: number, updateWith: UpdateAppAccess) {
     .execute();
 }
 
-export async function createAppAccess(user: NewAppAccess) {
+export async function createAppAccess(app: NewAppAccess) {
   const { insertId } = await db
     .insertInto("app_access")
-    .values(user)
+    .values(app)
     .executeTakeFirstOrThrow();
 
-  return await findAppAccessById(Number(insertId!));
+  return await findAppAccess({ app_id: app.app_id });
 }
 
-export async function deleteAppAccess(id: number) {
+export async function deleteAppAccess(id: string) {
   const appAccess = await findAppAccessById(id);
 
   if (appAccess) {

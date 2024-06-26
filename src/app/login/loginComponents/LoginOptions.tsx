@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import ChooseLoginSignup from "./ChooseLoginSignup";
-import Login from "./Login";
-import Signup from "../login/Signup";
+import ChooseLoginSignup from "@/app/login/loginComponents/ChooseLoginSignup";
+import Login from "@/app/login/loginComponents/Login";
+import Signup from "@/app/login/loginComponents/Signup";
 
 interface LoginOptionsInterface {
   choose: "login" | "signup" | "choose";
@@ -18,7 +18,7 @@ export default function LoginOptions({ choose }: LoginOptionsInterface) {
       case "login":
         return <Login />;
       default:
-        return <ChooseLoginSignup choose={setDisplayContent} />;
+        return <ChooseLoginSignup />;
     }
   };
   return (

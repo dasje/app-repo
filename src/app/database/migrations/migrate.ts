@@ -94,8 +94,12 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("id", "varchar(255)", (col) =>
       col.primaryKey().defaultTo(sql`UUID()`)
     )
-    .addColumn("user_id", "integer", (col) => col.notNull())
-    .addColumn("app_id", "integer", (col) => col.notNull())
+    .addColumn("user_id", "varchar(255)", (col) =>
+      col.references("User.id").onDelete("cascade").notNull()
+    )
+    .addColumn("app_id", "varchar(255)", (col) =>
+      col.references("apps.id").onDelete("cascade").notNull()
+    )
     .execute();
 
   await db.schema
@@ -108,7 +112,9 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("created_at", "text", (col) =>
       col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
-    .addColumn("created_by", "integer", (col) => col.notNull())
+    .addColumn("created_by", "varchar(255)", (col) =>
+      col.references("User.id").onDelete("cascade").notNull()
+    )
     .execute();
 
   await db.schema
@@ -117,7 +123,9 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("id", "varchar(255)", (col) =>
       col.primaryKey().defaultTo(sql`UUID()`)
     )
-    .addColumn("watchlist_id", "integer", (col) => col.notNull())
+    .addColumn("watchlist_id", "varchar(255)", (col) =>
+      col.references("watchlist_lists.id").onDelete("cascade").notNull()
+    )
     .addColumn("media_name", "text", (col) => col.notNull())
     .addColumn("watched", "boolean", (col) => col.notNull())
     .execute();
@@ -128,8 +136,12 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("id", "varchar(255)", (col) =>
       col.primaryKey().defaultTo(sql`UUID()`)
     )
-    .addColumn("watchlist_id", "integer", (col) => col.notNull())
-    .addColumn("user_id", "integer", (col) => col.notNull())
+    .addColumn("watchlist_id", "varchar(255)", (col) =>
+      col.references("watchlist_lists.id").onDelete("cascade").notNull()
+    )
+    .addColumn("user_id", "varchar(255)", (col) =>
+      col.references("User.id").onDelete("cascade").notNull()
+    )
     .execute();
 
   //   await db.schema

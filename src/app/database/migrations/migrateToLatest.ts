@@ -2,11 +2,11 @@ import * as path from "path";
 import { promises as fs } from "fs";
 import { Kysely, Migrator, MysqlDialect, FileMigrationProvider } from "kysely";
 import { createPool } from "mysql2";
-import { Database } from "../types";
+import { DB } from "../types";
 import { up } from "./migrate";
 
 async function migrateToLatest() {
-  const db = new Kysely<Database>({
+  const db = new Kysely<DB>({
     dialect: new MysqlDialect({
       pool: createPool({
         database: process.env.REACT_APP_DB_NAME,

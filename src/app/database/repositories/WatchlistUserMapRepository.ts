@@ -5,7 +5,7 @@ import {
   WatchlistUserMap,
 } from "@/app/database/types";
 
-export async function findWatchlistUserMapById(id: number) {
+export async function findWatchlistUserMapById(id: string) {
   return await db
     .selectFrom("watchlist_user_map")
     .where("id", "=", id)
@@ -34,7 +34,7 @@ export async function findWatchlistUserMappings(
 }
 
 export async function updateWatchlistUserMap(
-  id: number,
+  id: string,
   updateWith: UpdateWatchlistUserMap
 ) {
   await db
@@ -44,16 +44,19 @@ export async function updateWatchlistUserMap(
     .execute();
 }
 
-export async function createWatchlistUserMap(user: NewWatchlistUserMap) {
+export async function createWatchlistUserMap(userMap: NewWatchlistUserMap) {
   const { insertId } = await db
     .insertInto("watchlist_user_map")
-    .values(user)
+    .values(userMap)
     .executeTakeFirstOrThrow();
 
-  return await findWatchlistUserMapById(Number(insertId!));
+  return await findWatchlistUserMappings({
+    watchlist_list_id: userMap.watchlist_list_id,
+    user_id: userMap.user_id,
+  });
 }
 
-export async function deleteWatchlistUserMap(id: number) {
+export async function deleteWatchlistUserMap(id: string) {
   const userMap = await findWatchlistUserMapById(id);
 
   if (userMap) {
