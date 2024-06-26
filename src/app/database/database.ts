@@ -3,8 +3,8 @@ import { MysqlDialect } from "kysely";
 import { KyselyAuth } from "@auth/kysely-adapter";
 import { DB } from "@/app/database/types";
 
-import * as dotenv from "dotenv";
-dotenv.config({ path: ".env.local" });
+// import * as dotenv from "dotenv";
+// dotenv.config({ path: ".env.local" });
 
 const dialect = new MysqlDialect({
   pool: createPool({
