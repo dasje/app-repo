@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npm run migrate",
-    "start": "next start && npm run migrate",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "migrate": "env-cmd tsx ./src/app/database/migrations/migrateToLatest.ts"
   },
