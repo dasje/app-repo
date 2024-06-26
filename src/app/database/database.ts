@@ -1,6 +1,6 @@
-import { Database } from "@/app/database/types";
 import { createPool } from "mysql2"; // do not use 'mysql2/promises'!
-import { Kysely, MysqlDialect } from "kysely";
+import { MysqlDialect } from "kysely";
+import { KyselyAuth, Database } from "@auth/kysely-adapter";
 
 import * as dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
@@ -22,6 +22,6 @@ const dialect = new MysqlDialect({
 // knows your database structure.
 // Dialect is passed to Kysely's constructor, and from now on, Kysely knows how
 // to communicate with your database.
-export const db = new Kysely<Database>({
+export const db = new KyselyAuth<Database>({
   dialect,
 });

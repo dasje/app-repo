@@ -8,19 +8,19 @@ import EyeSlashFilledIcon from "@/app/lib/icons/eye_hide_filled_icon_200618.png"
 import Image from "next/image";
 import { emailValidation } from "../../lib/auth/emailValidation";
 import { passwordValidation } from "../../lib/auth/passwordValidation";
-import { useRouter } from "next/navigation";
-import { signUp } from "../../lib/api/signUp";
+import { signIn } from "next-auth/react";
+import { signupHandler } from "@/app/lib/handlers/signupHandler";
 
 const Signup = () => {
-  const router = useRouter();
-
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
+  const [signupNameValue, setSignupNameValue] = useState<string>("");
   const [signupEmailValue, setSignupEmailValue] = useState<string>("");
   const [signupPasswordValue, setSignupPasswordValue] = useState<string>("");
   const [signupRepeatPasswordValue, setSignupRepeatPasswordValue] =
     useState<string>("");
+  const [signupNameValid, setSignupNameValid] = useState<boolean>(false);
   const [signupEmailValid, setSignupEmailValid] = useState<boolean>(false);
   const [signupPasswordValid, setSignupPasswordValid] =
     useState<boolean>(false);
@@ -30,13 +30,28 @@ const Signup = () => {
 
   const handleSignupRequest = async () => {
     console.log("Handling signup request");
-    setSignupProcessing(true);
-    const res = await signUp(signupEmailValue, signupPasswordValue);
-    if (res?.message === "user_exists") {
-      setErrorMessage("User already exists");
-    } else if (res?.message === "user_added") {
+    try {
+      setSignupProcessing(true);
+      const signupBody = {
+        name: signupNameValue,
+        email: signupEmailValue,
+        password: signupPasswordValue,
+        passwordConfirm: signupRepeatPasswordValue,
+      };
+      const res = await signupHandler(signupBody);
+      console.log(res);
+      res.msg === "success" &&
+        signIn(undefined, { callbackUrl: "/login/login" });
+      if (res.msg === "error") {
+        if (res.msg.search("Duplicate entry")) {
+          setErrorMessage("User already exists.");
+        } else {
+          setErrorMessage(res.data.errorMessage);
+        }
+      }
+    } finally {
+      setSignupProcessing(false);
     }
-    setSignupProcessing(false);
   };
 
   return (
@@ -50,6 +65,23 @@ const Signup = () => {
       <Divider />
       <CardBody className="gap-4">
         {" "}
+        <Input
+          isRequired
+          type="name"
+          label="Name"
+          color="secondary"
+          isClearable
+          value={signupNameValue}
+          isInvalid={!signupNameValid}
+          onChange={(e) => {
+            setSignupNameValue(e.target.value);
+            signupNameValue.length < 2
+              ? setSignupNameValid(false)
+              : setSignupNameValid(true);
+            setErrorMessage(null);
+          }}
+          onClear={() => setSignupNameValue("")}
+        />
         <Input
           isRequired
           type="email"
@@ -152,6 +184,7 @@ const Signup = () => {
           color="secondary"
           isLoading={signupProcessing}
           isDisabled={
+            !signupNameValid ||
             !signupEmailValid ||
             !signupPasswordValid ||
             signupPasswordValue !== signupRepeatPasswordValue
