@@ -45,6 +45,8 @@ const Signup = () => {
       if (res.msg === "error") {
         if (res.msg.search("Duplicate entry")) {
           setErrorMessage("User already exists.");
+        } else if (res.msg.search("Access denied")) {
+          setErrorMessage("An errror occurred. Please contant administrator.");
         } else {
           setErrorMessage(res.data.errorMessage);
         }
