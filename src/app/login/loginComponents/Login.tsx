@@ -6,13 +6,13 @@ import { useState } from "react";
 import EyeFilledIcon from "@/app/lib/icons/eye_show_filled_icon_201405.png";
 import EyeSlashFilledIcon from "@/app/lib/icons/eye_hide_filled_icon_200618.png";
 import Image from "next/image";
-import { emailValidation } from "../../lib/auth/emailValidation";
-import { passwordValidation } from "../../lib/auth/passwordValidation";
-import { useRouter } from "next/navigation";
-import { login } from "@/app/lib/api/login";
+import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/apps";
 
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -21,13 +21,27 @@ const Login = () => {
   const [loginPasswordValue, setLoginPasswordValue] = useState<string>("");
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loginProcessing, setLoginProcessing] = useState<boolean>(false);
 
   const handleLoginRequest = async () => {
-    const res = await login(loginEmailValue, loginPasswordValue);
-    if (res.message === "user_exists") {
-      router.push("/login");
-    } else if (res.message === "wrong_credentials") {
-      setErrorMessage("Incorrect email or password.");
+    try {
+      setLoginProcessing(true);
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: loginEmailValue,
+        password: loginPasswordValue,
+        redirectTo: callbackUrl,
+      });
+      setLoginProcessing(false);
+      if (!res?.error) {
+        router.push(callbackUrl);
+      } else {
+        setErrorMessage("Incorrect email or password.");
+      }
+    } catch (error: any) {
+      setErrorMessage(error.message);
+    } finally {
+      setLoginProcessing(false);
     }
   };
 
@@ -98,8 +112,8 @@ const Login = () => {
         <Button
           radius="full"
           color="primary"
-          isLoading={false}
-          disabled={false}
+          isLoading={loginProcessing}
+          disabled={loginProcessing}
           variant="ghost"
           onPress={handleLoginRequest}
         >

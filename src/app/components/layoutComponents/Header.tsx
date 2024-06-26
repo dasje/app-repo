@@ -11,8 +11,18 @@ import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import Logo from "@/app/lib/images/badger-logo.jpg";
 import Image from "next/image";
+import { auth, signOut } from "@/auth";
+import { useEffect } from "react";
 
-const Header = () => {
+const Header = async () => {
+  const session = await auth();
+  const user = session?.user;
+
+  const logoutAction = async () => {
+    "use server";
+    await signOut();
+  };
+
   return (
     <Navbar position="static">
       <NavbarBrand className="gap-4">
@@ -22,7 +32,7 @@ const Header = () => {
         <p className="font-bold text-inherit">Badger Apps</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem isActive>
+        <NavbarItem>
           <Link href="/" aria-current="page">
             Home
           </Link>
@@ -34,16 +44,36 @@ const Header = () => {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="/login/login">
-            <div>Login</div>
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="/login/signup" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        {!user && (
+          <>
+            <NavbarItem className="hidden lg:flex">
+              <Link href="/login/login">
+                <div>Login</div>
+              </Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Button
+                as={Link}
+                color="primary"
+                href="/login/signup"
+                variant="flat"
+              >
+                Sign Up
+              </Button>
+            </NavbarItem>
+          </>
+        )}
+        {user && (
+          <>
+            <NavbarItem>
+              <form action={logoutAction}>
+                <Button type="submit" color="primary" variant="flat">
+                  Sign Out
+                </Button>
+              </form>
+            </NavbarItem>
+          </>
+        )}
       </NavbarContent>
     </Navbar>
   );
