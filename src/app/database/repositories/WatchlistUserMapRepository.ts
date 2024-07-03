@@ -4,6 +4,7 @@ import {
   UpdateWatchlistUserMap,
   WatchlistUserMap,
 } from "@/app/database/types";
+import { findUser } from "./UserRepository";
 
 export async function findWatchlistUserMapById(id: string) {
   return await db
@@ -26,8 +27,8 @@ export async function findWatchlistUserMappings(
     query = query.where("user_id", "=", criteria.user_id);
   }
 
-  if (criteria.watchlist_list_id) {
-    query = query.where("watchlist_list_id", "=", criteria.watchlist_list_id);
+  if (criteria.watchlist_id) {
+    query = query.where("watchlist_id", "=", criteria.watchlist_id);
   }
 
   return await query.selectAll().execute();
@@ -51,7 +52,7 @@ export async function createWatchlistUserMap(userMap: NewWatchlistUserMap) {
     .executeTakeFirstOrThrow();
 
   return await findWatchlistUserMappings({
-    watchlist_list_id: userMap.watchlist_list_id,
+    watchlist_id: userMap.watchlist_id,
     user_id: userMap.user_id,
   });
 }
@@ -64,4 +65,29 @@ export async function deleteWatchlistUserMap(id: string) {
   }
 
   return userMap;
+}
+
+export async function fetchAllUserListWithContent(
+  userId: string,
+  watchlistId: string
+) {
+  return await db
+    .selectFrom("watchlist_user_map")
+    .where("user_id", "=", userId)
+    .where("watchlist_id", "=", watchlistId)
+    .selectAll()
+    .execute();
+}
+
+export async function fetchAllUserLists(userId: string) {
+  return await db
+    .selectFrom("watchlist_user_map")
+    .where("user_id", "=", userId)
+    .innerJoin(
+      "watchlist_lists",
+      "watchlist_lists.id",
+      "watchlist_user_map.watchlist_id"
+    )
+    .selectAll()
+    .execute();
 }

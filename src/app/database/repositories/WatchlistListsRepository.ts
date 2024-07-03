@@ -4,6 +4,8 @@ import {
   UpdateWatchlistLists,
   WatchlistLists,
 } from "@/app/database/types";
+import { findUser } from "./UserRepository";
+import { createWatchlistUserMap } from "./WatchlistUserMapRepository";
 
 export async function findWatchlistListById(id: string) {
   return await db
@@ -47,15 +49,21 @@ export async function updateWatchlistList(
 }
 
 export async function createWatchlistList(watchlistList: NewWatchlistLists) {
+  console.log("watchlist list new: ", watchlistList);
   const { insertId } = await db
     .insertInto("watchlist_lists")
     .values(watchlistList)
     .executeTakeFirstOrThrow();
 
-  return await findWatchlistList({
+  const addedList = await findWatchlistList({
     name: watchlistList.name,
     created_by: watchlistList.created_by,
   });
+  await createWatchlistUserMap({
+    watchlist_id: addedList[0].id,
+    user_id: watchlistList.created_by,
+  });
+  return addedList[0];
 }
 
 export async function deleteWatchlistList(id: string) {

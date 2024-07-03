@@ -9,6 +9,10 @@ export async function findAppById(id: string) {
     .executeTakeFirst();
 }
 
+export async function findAllApps() {
+  return await db.selectFrom("apps").selectAll().execute();
+}
+
 export async function findApps(criteria: Partial<App>) {
   let query = db.selectFrom("apps");
 
