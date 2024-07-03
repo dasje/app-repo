@@ -1,3 +1,5 @@
+"use server";
+
 export type signupBody = {
   name: string;
   email: string;

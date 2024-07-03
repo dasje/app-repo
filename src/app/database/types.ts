@@ -71,8 +71,8 @@ export type UpdateVerificationToken = Updateable<VerificationTokenTable>;
 
 export interface AppAccessTable {
   id: string;
-  user_id: number;
-  app_id: number;
+  user_id: string;
+  app_id: string;
 }
 export type AppAccess = Selectable<AppAccessTable>;
 export type NewAppAccess = Insertable<AppAccessTable>;
@@ -81,9 +81,14 @@ export type UpdateAppAccess = Updateable<AppAccessTable>;
 export interface AppTable {
   id: string;
   app_name: string;
+  app_prefix: string;
+  byline: string;
+  short_description: string;
+  long_description: string;
+  remote_image_address: string;
   version: string;
-  mobile: boolean;
-  offline: boolean;
+  mobile: number;
+  offline: number;
 }
 export type App = Selectable<AppTable>;
 export type NewApp = Insertable<AppTable>;
@@ -93,7 +98,7 @@ export interface WatchlistListsTable {
   id: string;
   name: string;
   created_at: ColumnType<Date, string | undefined, never>;
-  created_by: number;
+  created_by: string;
 }
 export type WatchlistLists = Selectable<WatchlistListsTable>;
 export type NewWatchlistLists = Insertable<WatchlistListsTable>;
@@ -101,9 +106,9 @@ export type UpdateWatchlistLists = Updateable<WatchlistListsTable>;
 
 export interface WatchlistContentTable {
   id: string;
-  watchlist_list_id: number;
+  watchlist_id: string;
   media_name: string;
-  watched: boolean;
+  watched: number;
 }
 
 export type WatchlistContent = Selectable<WatchlistContentTable>;
@@ -112,8 +117,8 @@ export type UpdateWatchlistContent = Updateable<WatchlistContentTable>;
 
 export interface WatchlistUserMapTable {
   id: string;
-  watchlist_list_id: number;
-  user_id: number;
+  watchlist_id: string;
+  user_id: string;
 }
 export type WatchlistUserMap = Selectable<WatchlistUserMapTable>;
 export type NewWatchlistUserMap = Insertable<WatchlistUserMapTable>;

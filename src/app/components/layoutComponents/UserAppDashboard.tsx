@@ -3,24 +3,27 @@ import AppDashboardCard from "../AppDashboardCard";
 import { ResDataType } from "@/app/lib/messageSchemas/resErrorType";
 import { AppTable } from "@/app/database/types";
 import { UserType } from "@/app/lib/handlers/getUser";
+import UserAppDashboardCard from "../UserAppDashboardCard";
 
-interface AppDashboardInterface {
+interface UserAppDashboardInterface {
   appsRes: AppTable[];
   // | ResDataType<string, string>
   // | ResDataType<string, Promise<AppTable[]>>;
   user: UserType;
 }
-const AppDashboard = async ({ appsRes, user }: AppDashboardInterface) => {
-  console.log(appsRes, user);
+const UserAppDashboard = async ({
+  appsRes,
+  user,
+}: UserAppDashboardInterface) => {
   // TODO: Make apps overspill and scrollable on x-axis
   return (
     <>
       <div className="font-bold text-3xl text-center">
         <div className="self-center tracking-wide font-bold text-lg p-4">
-          Add an app
+          Your apps
         </div>
         <Divider />
-        <div className="grid ">
+        <div className="grid p-4">
           {appsRes &&
             Array.isArray(appsRes) &&
             appsRes.length > 0 &&
@@ -29,7 +32,7 @@ const AppDashboard = async ({ appsRes, user }: AppDashboardInterface) => {
                 <div className="tracking-wide font-semibold text-lg">
                   {i.app_name}
                 </div>
-                <AppDashboardCard
+                <UserAppDashboardCard
                   image={i.remote_image_address}
                   imageAlt={`App image for ${i.app_name}`}
                   appLink={`/apps/${i.app_prefix}`}
@@ -45,4 +48,4 @@ const AppDashboard = async ({ appsRes, user }: AppDashboardInterface) => {
   );
 };
 
-export default AppDashboard;
+export default UserAppDashboard;

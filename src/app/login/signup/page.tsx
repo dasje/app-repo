@@ -1,3 +1,4 @@
+"use client";
 import Signup from "../loginComponents/Signup";
 
 export default function Page() {
