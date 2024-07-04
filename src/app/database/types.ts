@@ -107,8 +107,21 @@ export type UpdateWatchlistLists = Updateable<WatchlistListsTable>;
 export interface WatchlistContentTable {
   id: string;
   watchlist_id: string;
-  media_name: string;
   watched: number;
+  media_name: string;
+  year: string;
+  rated: string;
+  released: string;
+  runtime: string;
+  genre: string;
+  director: string;
+  writer: string;
+  plot: string;
+  language: string;
+  country: string;
+  awards: string;
+  poster: string;
+  imdb_id: string;
 }
 
 export type WatchlistContent = Selectable<WatchlistContentTable>;

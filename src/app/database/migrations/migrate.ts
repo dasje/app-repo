@@ -123,19 +123,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
-    .createTable("watchlist_content")
-    .ifNotExists()
-    .addColumn("id", "varchar(255)", (col) =>
-      col.primaryKey().defaultTo(sql`UUID()`)
-    )
-    .addColumn("watchlist_id", "varchar(255)", (col) =>
-      col.references("watchlist_lists.id").onDelete("cascade").notNull()
-    )
-    .addColumn("media_name", "text", (col) => col.notNull())
-    .addColumn("watched", "boolean", (col) => col.notNull())
-    .execute();
-
-  await db.schema
     .createTable("watchlist_user_map")
     .ifNotExists()
     .addColumn("id", "varchar(255)", (col) =>
@@ -147,6 +134,33 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("user_id", "varchar(255)", (col) =>
       col.references("User.id").onDelete("cascade").notNull()
     )
+    .execute();
+
+  await db.schema
+    .createTable("watchlist_content")
+    .ifNotExists()
+    .addColumn("id", "varchar(255)", (col) =>
+      col.primaryKey().defaultTo(sql`UUID()`)
+    )
+    .addColumn("watchlist_id", "varchar(255)", (col) =>
+      col.references("watchlist_lists.id").onDelete("cascade").notNull()
+    )
+    .addColumn("watched", "boolean", (col) => col.notNull())
+    .addColumn("media_name", "text", (col) => col.notNull())
+    .addColumn("year", "text")
+    .addColumn("rated", "text")
+    .addColumn("released", "text")
+    .addColumn("runtime", "text")
+    .addColumn("genre", "text")
+    .addColumn("director", "text")
+    .addColumn("writer", "text")
+    .addColumn("plot", "text")
+    .addColumn("language", "text")
+    .addColumn("country", "text")
+    .addColumn("awards", "text")
+    .addColumn("poster", "text")
+    .addColumn("imdb_id", "text")
+
     .execute();
 
   //   await db.schema
