@@ -146,6 +146,12 @@ export async function up(db: Kysely<any>): Promise<void> {
       col.references("watchlist_lists.id").onDelete("cascade").notNull()
     )
     .addColumn("watched", "boolean", (col) => col.notNull())
+    .addColumn("date_added", "text", (col) =>
+      col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+    )
+    .addColumn("user_id", "varchar(255)", (col) =>
+      col.references("User.id").onDelete("cascade").notNull()
+    )
     .addColumn("media_name", "text", (col) => col.notNull())
     .addColumn("year", "text")
     .addColumn("rated", "text")
