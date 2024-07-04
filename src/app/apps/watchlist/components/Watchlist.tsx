@@ -28,14 +28,15 @@ interface Watchlist {
 
 const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
   const [fetchListValues, setFetchListValues] = useState<boolean>(false);
-  const [watchlistContent, setWatchlistContent] =
-    useState<WatchlistContentTable[]>();
+  const [watchlistContent, setWatchlistContent] = useState<
+    WatchlistContentTable[]
+  >([]);
   const [values, setValues] = useState(new Set([]));
 
   useEffect(() => {
     const fetchWatchlistValues = async () => {
       await fetch(
-        process.env.NEXT_PUBLIC_URL + "/api/watchlist/user-watchlists",
+        process.env.NEXT_PUBLIC_URL + "/api/watchlist/watchlist-items",
         {
           method: "POST",
           body: JSON.stringify({ watchlistId }),
@@ -46,12 +47,12 @@ const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
       ).then(async (res) => {
         if (res.status !== 200) {
           console.log("Error caught");
-          //   setWatchlistContent({ message: [] });
+          setWatchlistContent([]);
         } else {
-          // const parsedRes = await.json()
-          //   setWatchlistContent(parsedRes.message)
-          //   console.log("Success fetching user lists", watchlistContent);
-          console.log("LIST", await res.json());
+          const parsedRes = await res.json();
+          setWatchlistContent(parsedRes.message);
+          console.log("Success fetching user lists", watchlistContent);
+          console.log("LIST", parsedRes);
         }
       });
     };
@@ -130,7 +131,7 @@ const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
                             <Checkbox
                               className="col-span-7"
                               defaultSelected
-                              lineThrough
+                              lineThrough={item.watched === 1}
                             >
                               {item.media_name}
                             </Checkbox>
