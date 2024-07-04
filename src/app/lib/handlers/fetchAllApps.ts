@@ -31,18 +31,18 @@ export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
           console.log(error.message);
           return {
             msg: "error",
-            data: [],
+            data: { apps: [] },
           };
         });
       }
       return {
         msg: "error",
-        data: [],
+        data: { apps: [] },
       };
     }
     return { msg: "success", data: await resAllApps.json() };
   } catch (error: any) {
     console.log("Catcging an error", error);
-    return { msg: "error", data: [] };
+    return { msg: "error", data: { apps: [] } };
   }
 };

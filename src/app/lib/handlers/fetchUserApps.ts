@@ -19,16 +19,13 @@ export const userAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
     if (!resUserApps.ok) {
       const errorUserAppsData = await resUserApps.json();
       console.log("Error caught in fetchUserApps: ", errorUserAppsData.message);
-      return { msg: errorUserAppsData.message, data: [] };
+      return { msg: errorUserAppsData.message, data: { apps: [] } };
     }
-    return {
-      msg: "success",
-      data: await resUserApps.json(),
-    };
+    return { msg: "success", data: await resUserApps.json() };
   } catch (error: any) {
     return {
       msg: "error",
-      data: [],
+      data: { apps: [] },
     };
   }
 };

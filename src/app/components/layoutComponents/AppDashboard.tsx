@@ -6,40 +6,51 @@ import { UserType } from "@/app/lib/handlers/getUser";
 
 interface AppDashboardInterface {
   appsRes: AppTable[];
-  // | ResDataType<string, string>
-  // | ResDataType<string, Promise<AppTable[]>>;
   user: UserType;
 }
 const AppDashboard = async ({ appsRes, user }: AppDashboardInterface) => {
-  console.log(appsRes, user);
-  // TODO: Make apps overspill and scrollable on x-axis
   return (
     <>
       <div className="font-bold text-3xl text-center">
-        <div className="self-center tracking-wide font-bold text-lg p-4">
-          Add an app
-        </div>
-        <Divider />
-        <div className="grid ">
-          {appsRes &&
-            Array.isArray(appsRes) &&
-            appsRes.length > 0 &&
-            appsRes.map((i: AppTable, k) => (
-              <div key={k} className="col-span-1">
-                <div className="tracking-wide font-semibold text-lg">
-                  {i.app_name}
-                </div>
-                <AppDashboardCard
-                  image={i.remote_image_address}
-                  imageAlt={`App image for ${i.app_name}`}
-                  appLink={`/apps/${i.app_prefix}`}
-                  appByline={i.byline}
-                  appId={i.id}
-                  currentUser={user.email}
-                />
+        {Array.isArray(appsRes) && appsRes.length > 0 ? (
+          <>
+            <div className="self-center tracking-wide font-bold text-lg p-4">
+              Add an app
+            </div>
+            <Divider />
+            <div className="container min-w-screen max-h-60 md:max-h-80 overflow-y-hidden overflow-y-scroll scrolling-auto scrolling-touch">
+              <div className="grid grid-cols-1 md:grid-cols-6">
+                {appsRes &&
+                  Array.isArray(appsRes) &&
+                  appsRes.length > 0 &&
+                  appsRes.map((i: AppTable, k) => (
+                    <div key={k} className="col-span-1">
+                      <div className="tracking-wide font-semibold text-lg">
+                        {i.app_name}
+                      </div>
+                      <AppDashboardCard
+                        image={i.remote_image_address}
+                        imageAlt={`App image for ${i.app_name}`}
+                        appLink={`/apps/${i.app_prefix}`}
+                        appByline={i.byline}
+                        appId={i.id}
+                        currentUser={user.email}
+                      />
+                    </div>
+                  ))}
               </div>
-            ))}
-        </div>
+            </div>
+          </>
+        ) : (
+          <div className="font-bold text-3xl text-center grid-cols-4">
+            <div className="self-center tracking-wide font-bold text-lg p-4">
+              Add an app
+            </div>
+            <div className="self-center tracking-wide font-bold text-lg p-4">
+              Error fetching apps: please try again shortly.
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

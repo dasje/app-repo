@@ -6,7 +6,7 @@ export type fetchAppsBody = {
 
 export type ResDataType<TReturnMessage, TReturnData> = {
   msg: TReturnMessage;
-  data: TReturnData;
+  data: { apps: TReturnData };
 };
 
 export type ResType = {
