@@ -1,14 +1,6 @@
-import {
-  fetchAppsBody,
-  ResErrorMessageType,
-  ResSuccessMessageType,
-  ResType,
-} from "../messageSchemas/resErrorType";
+import { fetchAppsBody } from "../schemas/res-types";
 
 export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
-  console.log("Handling fetch all apps request");
-  console.log(JSON.stringify(fetchAppsBody));
-
   try {
     const resAllApps = await fetch(
       process.env.NEXT_PUBLIC_URL + "/api/applications",

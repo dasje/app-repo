@@ -1,11 +1,8 @@
-import { fetchAppsBody, ResDataType } from "../messageSchemas/resErrorType";
+import { fetchAppsBody } from "../schemas/res-types";
 import { allAppsHandler } from "./fetchAllApps";
 import { userAppsHandler } from "./fetchUserApps";
 
 export const availableAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
-  console.log("Handling fetch apps request");
-  console.log(JSON.stringify(fetchAppsBody));
-
   const resAllApps = await allAppsHandler(fetchAppsBody);
 
   if (resAllApps.msg !== "success") {

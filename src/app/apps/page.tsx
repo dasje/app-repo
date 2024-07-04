@@ -8,7 +8,7 @@ import { AppAccess, AppTable } from "../database/types";
 import { allAppsHandler } from "../lib/handlers/fetchAllApps";
 import { userAppsHandler } from "../lib/handlers/fetchUserApps";
 import UserAppDashboard from "../components/layoutComponents/UserAppDashboard";
-import { ResDataType, ResType } from "../lib/messageSchemas/resErrorType";
+import { ResDataType, ResType } from "../lib/schemas/res-types";
 
 export default async function Page() {
   const user = await getUser();
