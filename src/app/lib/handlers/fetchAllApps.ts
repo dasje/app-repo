@@ -11,7 +11,7 @@ export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
 
   try {
     const resAllApps = await fetch(
-      process.env.REACT_APP_URL + "/api/applications",
+      process.env.NEXT_PUBLIC_URL + "/api/applications",
       {
         method: "POST",
         body: JSON.stringify(fetchAppsBody),
@@ -21,6 +21,7 @@ export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
       }
     );
     if (!resAllApps.ok) {
+      console.log("Error caught in fetchAllApps");
       const errorUserAppsData = await resAllApps.json();
       if (
         Array.isArray(errorUserAppsData.errors) &&
@@ -29,30 +30,19 @@ export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
         errorUserAppsData.errors.forEach((error: any) => {
           console.log(error.message);
           return {
-            message: {
-              msg: "error",
-              data: [],
-            },
-            status: 500,
-          } as ResType;
+            msg: "error",
+            data: [],
+          };
         });
       }
       return {
-        message: {
-          msg: "error",
-          data: [],
-        },
-        status: 500,
-      } as ResType;
+        msg: "error",
+        data: [],
+      };
     }
-    return {
-      message: { msg: "success", data: await resAllApps.json() },
-      status: 200,
-    } as ResType;
+    return { msg: "success", data: await resAllApps.json() };
   } catch (error: any) {
-    return {
-      message: { msg: "error", data: [] },
-      status: 500,
-    } as ResType;
+    console.log("Catcging an error", error);
+    return { msg: "error", data: [] };
   }
 };

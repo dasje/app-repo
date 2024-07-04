@@ -18,21 +18,25 @@ export type watchlistResponse = {
 export default async function Page() {
   const user = await getUser();
   var userLists: watchlistResponse;
-  await fetch(process.env.NEXT_PUBLIC_URL + "/api/watchlist/user-watchlists", {
-    method: "POST",
-    body: JSON.stringify({ userEmail: user.email }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then(async (res) => {
-    if (res.status !== 200) {
-      console.log("Error caught");
-      userLists = { message: [] };
-    } else {
-      userLists = await res.json();
-      console.log("Success fetching user lists", userLists);
-    }
-  });
+  user &&
+    (await fetch(
+      process.env.NEXT_PUBLIC_URL + "/api/watchlist/user-watchlists",
+      {
+        method: "POST",
+        body: JSON.stringify({ userEmail: user.email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then(async (res) => {
+      if (res.status !== 200) {
+        console.log("Error caught");
+        userLists = { message: [] };
+      } else {
+        userLists = await res.json();
+        console.log("Success fetching user lists", userLists);
+      }
+    }));
   const shows = [
     {
       id: "1",

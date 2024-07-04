@@ -6,7 +6,7 @@ const removeWatchlistItemHandler = async ({
   itemId,
 }: RemoveWatchlistItemHandlerInterface) => {
   const res = await fetch(
-    process.env.REACT_APP_URL + "/api/remove-watchlist-item",
+    process.env.NEXT_PUBLIC_URL + "/api/remove-watchlist-item",
     {
       method: "POST",
       body: JSON.stringify({ watchlistItemId: itemId }),

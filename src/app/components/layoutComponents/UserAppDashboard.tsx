@@ -7,8 +7,6 @@ import UserAppDashboardCard from "../UserAppDashboardCard";
 
 interface UserAppDashboardInterface {
   appsRes: AppTable[];
-  // | ResDataType<string, string>
-  // | ResDataType<string, Promise<AppTable[]>>;
   user: UserType;
 }
 const UserAppDashboard = async ({

@@ -2,35 +2,34 @@
 "use server";
 
 import AppDashboard from "../components/layoutComponents/AppDashboard";
-import { useEffect, useState } from "react";
-import { UserType, getUser } from "../lib/handlers/getUser";
-import { availableAppsHandler } from "../lib/handlers/fetchAvailableApps";
-import AppDashboardCard from "../components/AppDashboardCard";
+import { getUser } from "../lib/handlers/getUser";
 import { Divider } from "@nextui-org/react";
 import { AppTable } from "../database/types";
 import { allAppsHandler } from "../lib/handlers/fetchAllApps";
 import { userAppsHandler } from "../lib/handlers/fetchUserApps";
 import UserAppDashboard from "../components/layoutComponents/UserAppDashboard";
-import { ResType } from "../lib/messageSchemas/resErrorType";
+import { ResDataType, ResType } from "../lib/messageSchemas/resErrorType";
 
 export default async function Page() {
   const user = await getUser();
 
-  let appsRes: ResType = await allAppsHandler({
+  let appsRes: ResDataType<string, AppTable[]> = await allAppsHandler({
     userEmail: user?.email,
   });
 
-  let userAppsRes: ResType = await userAppsHandler({
+  let userAppsRes: ResDataType<string, AppTable[]> = await userAppsHandler({
     userEmail: user?.email,
   });
+  console.log(appsRes);
 
   let userApps = [];
 
-  userAppsRes.message.data.map((item, key) => {
-    appsRes.message.data.forEach((appItem) => {
-      item.id === appItem.id && userApps.push(appItem);
+  Array.isArray(userAppsRes.data) &&
+    userAppsRes.data.forEach((item) => {
+      appsRes.data.forEach((appItem) => {
+        item.id === appItem.id && userApps.push(appItem);
+      });
     });
-  });
 
   return (
     <>
@@ -48,8 +47,8 @@ export default async function Page() {
           <Divider />
           <div className="m-6 rounded bg-white flex flex-grow justify-center">
             {appsRes &&
-            Array.isArray(appsRes.message.data) &&
-            appsRes.message.data.length === 0 ? (
+            Array.isArray(appsRes.data) &&
+            appsRes.data.length === 0 ? (
               <div className="font-bold text-3xl text-center grid-cols-4">
                 <div className="self-center tracking-wide font-bold text-lg p-4">
                   Add an app
@@ -61,8 +60,7 @@ export default async function Page() {
             ) : (
               <AppDashboard
                 appsRes={
-                  Array.isArray(appsRes.message.data["apps"]) &&
-                  appsRes.message.data["apps"]
+                  Array.isArray(appsRes.data["apps"]) && appsRes.data["apps"]
                 }
                 user={user}
               />
