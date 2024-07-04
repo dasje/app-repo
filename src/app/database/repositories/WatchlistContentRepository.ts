@@ -30,8 +30,8 @@ export async function findWatchlistContent(
     query = query.where("watched", "=", criteria.watched);
   }
 
-  if (criteria.watchlist_list_id) {
-    query = query.where("watchlist_list_id", "=", criteria.watchlist_list_id);
+  if (criteria.watchlist_id) {
+    query = query.where("watchlist_id", "=", criteria.watchlist_id);
   }
 
   return await query.selectAll().execute();
@@ -57,12 +57,12 @@ export async function createWatchlistContent(
     .executeTakeFirstOrThrow();
 
   return await findWatchlistContent({
-    watchlist_list_id: watchlistContent.watchlist_list_id,
+    watchlist_id: watchlistContent.watchlist_id,
     media_name: watchlistContent.media_name,
   });
 }
 
-export async function deleteUser(id: string) {
+export async function deleteWatchlistContentItem(id: string) {
   const watchlistContent = await findWatchlistContentById(id);
 
   if (watchlistContent) {

@@ -24,7 +24,8 @@ export async function findAppAccess(criteria: Partial<AppAccess>) {
     query = query.where("user_id", "=", criteria.user_id);
   }
 
-  return await query.selectAll().execute();
+  const x = await query.selectAll().execute();
+  return x;
 }
 
 export async function updateAppAccess(id: string, updateWith: UpdateAppAccess) {
@@ -36,11 +37,13 @@ export async function updateAppAccess(id: string, updateWith: UpdateAppAccess) {
 }
 
 export async function createAppAccess(app: NewAppAccess) {
-  const { insertId } = await db
-    .insertInto("app_access")
-    .values(app)
-    .executeTakeFirstOrThrow();
-
+  const res = await findAppAccess({ user_id: app.user_id, app_id: app.app_id });
+  if (res.length === 0) {
+    const { insertId } = await db
+      .insertInto("app_access")
+      .values(app)
+      .executeTakeFirstOrThrow();
+  }
   return await findAppAccess({ app_id: app.app_id });
 }
 

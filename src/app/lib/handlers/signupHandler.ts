@@ -1,3 +1,5 @@
+"use server";
+
 export type signupBody = {
   name: string;
   email: string;
@@ -15,7 +17,7 @@ export type resType = {
 export const signupHandler = async (signupBody: signupBody) => {
   console.log("Handling signup request");
   try {
-    const res = await fetch("/api/register", {
+    const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/register", {
       method: "POST",
       body: JSON.stringify(signupBody),
       headers: {

@@ -33,7 +33,7 @@ const Header = async () => {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link href="/" aria-current="page">
+          <Link href={user ? "/apps" : "/"} aria-current="page">
             Home
           </Link>
         </NavbarItem>
