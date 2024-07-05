@@ -10,16 +10,13 @@ export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
   console.log(JSON.stringify(fetchAppsBody));
 
   try {
-    const resAllApps = await fetch(
-      process.env.NEXT_PUBLIC_URL + "/api/applications",
-      {
-        method: "POST",
-        body: JSON.stringify(fetchAppsBody),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const resAllApps = await fetch("/api/applications", {
+      method: "POST",
+      body: JSON.stringify(fetchAppsBody),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     if (!resAllApps.ok) {
       console.log("Error caught in fetchAllApps");
       const errorUserAppsData = await resAllApps.json();

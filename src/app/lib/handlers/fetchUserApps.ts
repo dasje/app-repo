@@ -5,16 +5,13 @@ export const userAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
   console.log(JSON.stringify(fetchAppsBody));
 
   try {
-    const resUserApps = await fetch(
-      process.env.NEXT_PUBLIC_URL + "/api/user-applications",
-      {
-        method: "POST",
-        body: JSON.stringify(fetchAppsBody),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const resUserApps = await fetch("/api/user-applications", {
+      method: "POST",
+      body: JSON.stringify(fetchAppsBody),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!resUserApps.ok) {
       const errorUserAppsData = await resUserApps.json();
