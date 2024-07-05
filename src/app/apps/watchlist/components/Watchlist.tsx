@@ -18,6 +18,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  Card,
 } from "@nextui-org/react";
 import { ListboxWrapper } from "@/app/components/ListboxWrapper";
 import Image from "next/image";
@@ -40,6 +41,7 @@ const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
   const [watchlistContent, setWatchlistContent] = useState<
     WatchlistContentTable[]
   >([]);
+  const [showSearchBox, setShowSearchBox] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
   const [omdbRes, setOmdbRes] = useState<OMDBResSchema>();
   const [displayOmdbRes, setDisplayOmdbRes] = useState<boolean>(false);
@@ -94,30 +96,53 @@ const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
 
   const addContent = (
     <>
-      <div className="grid grid-cols-5 space-x-4">
-        <Input
-          className="flex flex-grow col-span-4"
-          type="text"
-          label="Show/Film"
-          placeholder="Enter a film or TV show"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
-        <Button
-          className="col-span-1 self-center"
-          isIconOnly
-          color="primary"
-          aria-label="add"
-          onPress={() => setSearchForTitle(!searchForTitle)}
-        >
-          <Image
-            src={searchIcon}
-            alt="Add item to list."
-            width={20}
-            height={20}
-          />
-        </Button>
-      </div>
+      {!showSearchBox && (
+        <div className=" grid grid-cols-5 space-x-4">
+          <div className="col-span-4">
+            <Button onPress={() => setShowSearchBox(!showSearchBox)}>
+              Add show or movie
+            </Button>
+          </div>
+          <div className="col-span-1">
+            <Button isIconOnly onPress={() => setShowSearchBox(!showSearchBox)}>
+              <Image
+                src={deleteIcon}
+                alt="Delete list"
+                height={15}
+                width={15}
+              />
+            </Button>
+          </div>
+        </div>
+      )}
+      {showSearchBox && (
+        <Card>
+          <div className="grid grid-cols-5 space-x-4">
+            <Input
+              className="flex flex-grow col-span-4"
+              type="text"
+              label="Show/Film"
+              placeholder="Enter a film or TV show"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+            <Button
+              className="col-span-1 self-center"
+              isIconOnly
+              color="primary"
+              aria-label="add"
+              onPress={() => setSearchForTitle(!searchForTitle)}
+            >
+              <Image
+                src={searchIcon}
+                alt="Add item to list."
+                width={20}
+                height={20}
+              />
+            </Button>
+          </div>
+        </Card>
+      )}
     </>
   );
 
@@ -129,11 +154,6 @@ const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
   return (
     <>
       <div className="m-6 rounded bg-white flex flex-grow justify-center">
-        {displayOmdbRes && (
-          <div className="grid grid-cols-5 space-x-4">
-            <DropdownItem>{omdbRes && omdbRes.Title}</DropdownItem>
-          </div>
-        )}
         <ListboxWrapper>
           <Dropdown
             className=""
@@ -145,14 +165,24 @@ const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
                 {watchlistName}
               </div>
             </DropdownTrigger>
+
             <DropdownMenu closeOnSelect={false}>
               <DropdownItem>
-                <Popover placement="bottom" backdrop="blur">
+                {addContent}
+                {/* <Popover
+                  placement="bottom"
+                  backdrop="blur"
+                  isOpen={displayOmdbRes}
+                >
                   <PopoverTrigger>
-                    <Button>Add show or movie</Button>
+                    <div></div>
                   </PopoverTrigger>
-                  <PopoverContent>{addContent}</PopoverContent>
-                </Popover>
+                  <PopoverContent>
+                    <div className="grid grid-cols-5 space-x-4">
+                      {omdbRes && omdbRes.Title}
+                    </div>
+                  </PopoverContent>
+                </Popover> */}
               </DropdownItem>
               <DropdownItem>
                 <ListboxWrapper>
