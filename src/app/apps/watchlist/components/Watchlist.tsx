@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Listbox, ListboxSection, ListboxItem } from "@nextui-org/listbox";
 import { UserType, getUser } from "@/app/lib/handlers/getUser";
 import { useEffect, useMemo, useState } from "react";
@@ -14,11 +14,19 @@ import {
   DropdownItem,
   DropdownTrigger,
   DropdownMenu,
+  Button,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
 } from "@nextui-org/react";
 import { ListboxWrapper } from "@/app/components/ListboxWrapper";
 import Image from "next/image";
 import deleteIcon from "@/app/lib/icons/icons8-delete-120.png";
+import searchIcon from "@/app/lib/icons/icons8-search-100.png";
 import { WatchlistContentTable } from "@/app/database/types";
+import { fetchOMDBDataHandler } from "@/app/lib/handlers/fetchOMDBDataHandler";
+import { OMDBResSchema } from "@/app/lib/schemas/watchlist-schemas/omdb-message-schemas";
+import { removeWatchlistItemHandler } from "@/app/lib/handlers/removeWatchlistItemHandler";
 
 interface Watchlist {
   user: UserType;
@@ -27,11 +35,14 @@ interface Watchlist {
 }
 
 const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
+  const router = useRouter();
   const [fetchListValues, setFetchListValues] = useState<boolean>(false);
   const [watchlistContent, setWatchlistContent] = useState<
     WatchlistContentTable[]
   >([]);
-  const [values, setValues] = useState(new Set([]));
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [omdbRes, setOmdbRes] = useState<OMDBResSchema>();
+  const [displayOmdbRes, setDisplayOmdbRes] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchWatchlistValues = async () => {
@@ -59,52 +70,75 @@ const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
     fetchWatchlistValues();
   }, [fetchListValues]);
 
-  const arrayValues = Array.from(values);
+  const [searchForTitle, setSearchForTitle] = useState<boolean>(false);
 
-  const topContent = useMemo(() => {
-    if (!arrayValues.length) {
-      return null;
+  useEffect(() => {
+    if (searchValue.length === 0) {
+    } else {
+      const fetchTitle = async () => {
+        const res = await fetchOMDBDataHandler({ mediaName: searchValue });
+        // TODO: Handle res.msg === "error"
+        if (res.msg === "error") {
+        } else if (res.msg === "success") {
+          console.log("Fetched title ", res);
+          setOmdbRes(res.data);
+        }
+      };
+      fetchTitle();
     }
-    return (
-      <ScrollShadow
-        hideScrollBar
-        className="w-full flex py-0.5 px-2 gap-1"
-        orientation="horizontal"
-      >
-        {arrayValues.map((value) => (
-          <Chip key={value}>
-            {
-              watchlistContent.find((show) => `${show.id}` === `${show.id}`)
-                .media_name
-            }
-            {/* Chip */}
-          </Chip>
-        ))}
-      </ScrollShadow>
-    );
-  }, [arrayValues.length]);
+  }, [searchForTitle]);
 
-  const addContent = useMemo(() => {
-    return (
-      <Input
-        className="flex flex-grow"
-        type="text"
-        label="Item"
-        placeholder="Enter a film or TV show"
-      />
-    );
-  }, [arrayValues.length]);
+  useEffect(() => {
+    setDisplayOmdbRes(!displayOmdbRes);
+  }, [omdbRes]);
+
+  const addContent = (
+    <>
+      <div className="grid grid-cols-5 space-x-4">
+        <Input
+          className="flex flex-grow col-span-4"
+          type="text"
+          label="Show/Film"
+          placeholder="Enter a film or TV show"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+        <Button
+          className="col-span-1 self-center"
+          isIconOnly
+          color="primary"
+          aria-label="add"
+          onPress={() => setSearchForTitle(!searchForTitle)}
+        >
+          <Image
+            src={searchIcon}
+            alt="Add item to list."
+            width={20}
+            height={20}
+          />
+        </Button>
+      </div>
+    </>
+  );
 
   const removeListItem = (itemId: string) => {
-    removeWatchlistItemHandler({ itemId });
+    removeWatchlistItemHandler({ itemId }).then(
+      (res) => res.message === "success" && setFetchListValues(!fetchListValues)
+    );
   };
   return (
     <>
       <div className="m-6 rounded bg-white flex flex-grow justify-center">
+        {displayOmdbRes && (
+          <div className="grid grid-cols-5 space-x-4">
+            <DropdownItem>{omdbRes && omdbRes.Title}</DropdownItem>
+          </div>
+        )}
         <ListboxWrapper>
           <Dropdown
             className=""
             onOpenChange={() => setFetchListValues(!fetchListValues)}
+            backdrop="blur"
           >
             <DropdownTrigger>
               <div className="rounded-none border border-solid flex justify-center p-4">
@@ -113,9 +147,17 @@ const Watchlist = ({ user, watchlistName, watchlistId }: Watchlist) => {
             </DropdownTrigger>
             <DropdownMenu closeOnSelect={false}>
               <DropdownItem>
+                <Popover placement="bottom" backdrop="blur">
+                  <PopoverTrigger>
+                    <Button>Add show or movie</Button>
+                  </PopoverTrigger>
+                  <PopoverContent>{addContent}</PopoverContent>
+                </Popover>
+              </DropdownItem>
+              <DropdownItem>
                 <ListboxWrapper>
                   <Listbox
-                    topContent={addContent}
+                    // topContent={addContent}
                     classNames={{
                       base: "w-full",
                       list: "max-h-[300px] overflow-scroll",
