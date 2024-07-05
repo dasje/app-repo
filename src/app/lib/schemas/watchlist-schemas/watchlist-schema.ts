@@ -1,4 +1,4 @@
-import { TypeOf, object, string } from "zod";
+import { TypeOf, number, object, string } from "zod";
 
 export const addWatchlistSchema = object({
   watchlistName: string({ required_error: "Item name is required" }).min(
@@ -100,10 +100,11 @@ export const getWatchlistContentSchema = object({
 
 export type WatchlistContent = TypeOf<typeof getWatchlistContentSchema>;
 
-export const removeWatchlistItemSchema = object({
+export const selectWatchlistItemSchema = object({
   watchlistItemId: string({
     required_error: "Watchlist item ID is required",
   }).min(1, "Watchlist item ID is required"),
+  watchlistItemWatchStatus: number().optional(),
 });
 
-export type WatchlistItem = TypeOf<typeof removeWatchlistItemSchema>;
+export type WatchlistItem = TypeOf<typeof selectWatchlistItemSchema>;
