@@ -1,3 +1,5 @@
+"use server";
+
 import { fetchAppsBody } from "../messageSchemas/resErrorType";
 
 export const userAppsHandler = async (fetchAppsBody: fetchAppsBody) => {

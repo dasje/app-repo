@@ -1,9 +1,6 @@
-import {
-  fetchAppsBody,
-  ResErrorMessageType,
-  ResSuccessMessageType,
-  ResType,
-} from "../messageSchemas/resErrorType";
+"use server";
+
+import { fetchAppsBody } from "../messageSchemas/resErrorType";
 
 export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
   console.log("Handling fetch all apps request");
