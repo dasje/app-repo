@@ -1,7 +1,7 @@
 import { findUser } from "@/app/database/repositories/UserRepository";
 import {
   addWatchlistSchema,
-  removeWatchlistItemSchema,
+  selectWatchlistItemSchema,
 } from "@/app/lib/schemas/watchlist-schemas/watchlist-schema";
 import { createWatchlistList } from "@/app/database/repositories/WatchlistListsRepository";
 import { createWatchlistUserMap } from "@/app/database/repositories/WatchlistUserMapRepository";
@@ -11,7 +11,7 @@ import { deleteWatchlistContentItem } from "@/app/database/repositories/Watchlis
 export async function POST(req: Request) {
   console.log("HERE REQ ", req);
   try {
-    const { watchlistItemId } = removeWatchlistItemSchema.parse(
+    const { watchlistItemId } = selectWatchlistItemSchema.parse(
       await req.json()
     );
     await deleteWatchlistContentItem(watchlistItemId);

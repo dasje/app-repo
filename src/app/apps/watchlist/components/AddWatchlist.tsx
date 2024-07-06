@@ -63,6 +63,8 @@ const AddWatchlist = ({ user }: AddWatchlistInterface) => {
                   onClick={() => setShowCover(!showCover)}
                   onMouseEnter={() => setOnHoverIcon(!onHoverIcon)}
                   onMouseLeave={() => setOnHoverIcon(!onHoverIcon)}
+                  width={40}
+                  height={40}
                 />
               </div>
             </div>

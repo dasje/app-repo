@@ -1,16 +1,8 @@
-import { findUser } from "@/app/database/repositories/UserRepository";
-import {
-  addWatchlistSchema,
-  getWatchlistContentSchema,
-} from "@/app/lib/schemas/watchlist-schemas/watchlist-schema";
-import { createWatchlistList } from "@/app/database/repositories/WatchlistListsRepository";
-import { createWatchlistUserMap } from "@/app/database/repositories/WatchlistUserMapRepository";
-import { WatchlistListsTable } from "@/app/database/types";
+import { getWatchlistContentSchema } from "@/app/lib/schemas/watchlist-schemas/watchlist-schema";
 import { findWatchlistContent } from "@/app/database/repositories/WatchlistContentRepository";
 
 export async function POST(req: Request) {
   var items;
-  console.log("HERE REQ ", req);
   try {
     const { watchlistId } = getWatchlistContentSchema.parse(await req.json());
     items = await findWatchlistContent({

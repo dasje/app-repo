@@ -1,6 +1,6 @@
 "use server";
 
-import { fetchAppsBody } from "../messageSchemas/resErrorType";
+import { fetchAppsBody } from "../schemas/res-types";
 
 export const userAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
   console.log("Handling fetch user apps request");

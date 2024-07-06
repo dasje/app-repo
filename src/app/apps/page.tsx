@@ -8,8 +8,8 @@ import { AppAccess, AppTable } from "../database/types";
 import { allAppsHandler } from "../lib/handlers/fetchAllApps";
 import { userAppsHandler } from "../lib/handlers/fetchUserApps";
 import UserAppDashboard from "../components/layoutComponents/UserAppDashboard";
-import { ResDataType } from "../lib/messageSchemas/resErrorType";
 import { useEffect, useState } from "react";
+import { ResDataType } from "../lib/schemas/res-types";
 
 export default function Page() {
   const [user, setUser] = useState<UserType>();
