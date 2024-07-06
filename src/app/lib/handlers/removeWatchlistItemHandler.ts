@@ -2,11 +2,12 @@ interface RemoveWatchlistItemHandlerInterface {
   itemId: string;
 }
 
-const removeWatchlistItemHandler = async ({
+export const removeWatchlistItemHandler = async ({
   itemId,
 }: RemoveWatchlistItemHandlerInterface) => {
+  console.log(itemId);
   const res = await fetch(
-    process.env.NEXT_PUBLIC_URL + "/api/remove-watchlist-item",
+    process.env.NEXT_PUBLIC_URL + "/api/watchlist/remove-watchlist-item",
     {
       method: "POST",
       body: JSON.stringify({ watchlistItemId: itemId }),
