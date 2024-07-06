@@ -7,10 +7,7 @@ interface UserAppDashboardInterface {
   appsRes: AppTable[];
   user: UserType;
 }
-const UserAppDashboard = async ({
-  appsRes,
-  user,
-}: UserAppDashboardInterface) => {
+const UserAppDashboard = ({ appsRes, user }: UserAppDashboardInterface) => {
   return (
     <>
       <div className="font-bold text-3xl text-center">

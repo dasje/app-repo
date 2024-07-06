@@ -1,6 +1,5 @@
-import { Button, Card, CardFooter, Divider } from "@nextui-org/react";
+import { Divider } from "@nextui-org/react";
 import AppDashboardCard from "../AppDashboardCard";
-import { ResDataType } from "@/app/lib/messageSchemas/resErrorType";
 import { AppTable } from "@/app/database/types";
 import { UserType } from "@/app/lib/handlers/getUser";
 
@@ -8,7 +7,7 @@ interface AppDashboardInterface {
   appsRes: AppTable[];
   user: UserType;
 }
-const AppDashboard = async ({ appsRes, user }: AppDashboardInterface) => {
+const AppDashboard = ({ appsRes, user }: AppDashboardInterface) => {
   return (
     <>
       <div className="font-bold text-3xl text-center">

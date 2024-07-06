@@ -1,44 +1,62 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-"use server";
+"use client";
 
 import AppDashboard from "../components/layoutComponents/AppDashboard";
-import { getUser } from "../lib/handlers/getUser";
+import { getUser, UserType } from "../lib/handlers/getUser";
 import { Divider } from "@nextui-org/react";
 import { AppAccess, AppTable } from "../database/types";
 import { allAppsHandler } from "../lib/handlers/fetchAllApps";
 import { userAppsHandler } from "../lib/handlers/fetchUserApps";
 import UserAppDashboard from "../components/layoutComponents/UserAppDashboard";
-import { ResDataType, ResType } from "../lib/schemas/res-types";
+import { useEffect, useState } from "react";
+import { ResDataType } from "../lib/schemas/res-types";
 
-export default async function Page() {
-  const user = await getUser();
-  let userApps: AppTable[] = [];
-  let appsRes: ResDataType<string, AppTable[]>;
-  let userAppsRes: ResDataType<string, AppAccess[]>;
+export default function Page() {
+  const [user, setUser] = useState<UserType>();
 
-  try {
-    appsRes = await allAppsHandler({
-      userEmail: user?.email,
-    });
+  useEffect(() => {
+    const findUser = async () => {
+      const currentUser = await getUser();
+      setUser(currentUser);
+    };
+    findUser();
+  }, []);
 
-    userAppsRes = await userAppsHandler({
-      userEmail: user?.email,
-    });
-    console.log("URR", userAppsRes);
-    console.log("AR", appsRes);
-  } finally {
-    Array.isArray(userAppsRes.data.apps) &&
-      userAppsRes.data.apps.forEach((item) => {
-        appsRes.data.apps.forEach((appItem) => {
-          if (item.app_id === appItem.id) {
-            userApps.push(appItem);
-            appsRes.data.apps.filter((i) => {
-              i.id !== appItem.id;
-            });
-          }
+  const [userApps, setUserApps] = useState<AppTable[]>([]);
+  const [appsRes, setApps] = useState<ResDataType<string, AppTable[]>>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let apps: ResDataType<string, AppTable[]>;
+      let userApplications: ResDataType<string, AppAccess[]>;
+      try {
+        apps = await allAppsHandler({
+          userEmail: user?.email,
         });
-      });
-  }
+
+        userApplications = await userAppsHandler({
+          userEmail: user?.email,
+        });
+      } finally {
+        setApps(apps);
+        let userApps = [];
+        Array.isArray(userApplications.data.apps) &&
+          userApplications.data.apps.forEach((item) => {
+            apps.data.apps.forEach((appItem) => {
+              if (item.app_id === appItem.id) {
+                userApps.push(appItem);
+                apps.data.apps.filter((i) => {
+                  i.id !== appItem.id;
+                });
+              }
+            });
+          });
+        setUserApps(userApps);
+        console.log("User apps and all apps", userApps, appsRes);
+      }
+    };
+    fetchData();
+  }, [user]);
 
   return (
     <>
@@ -55,10 +73,12 @@ export default async function Page() {
           </div>
           <Divider />
           <div className="m-6 rounded bg-white flex flex-grow justify-center">
-            <AppDashboard
-              appsRes={Array.isArray(appsRes.data.apps) && appsRes.data.apps}
-              user={user}
-            />
+            {appsRes && (
+              <AppDashboard
+                appsRes={Array.isArray(appsRes.data.apps) && appsRes.data.apps}
+                user={user}
+              />
+            )}
           </div>
         </>
       )}
