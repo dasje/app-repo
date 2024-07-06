@@ -32,7 +32,6 @@ const UserAppDashboardCard = ({
   appId,
   currentUser,
 }: UserAppDashboardCardInterface) => {
-  const router = useRouter();
   return (
     <div className="p-4">
       <Card isFooterBlurred radius="lg" className="border-none">

@@ -1,13 +1,9 @@
-import {
-  fetchAppsBody,
-  ResErrorMessageType,
-  ResSuccessMessageType,
-  ResType,
-} from "../messageSchemas/resErrorType";
+"use server";
+
+import { fetchAppsBody } from "../messageSchemas/resErrorType";
 
 export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
   console.log("Handling fetch all apps request");
-  console.log(JSON.stringify(fetchAppsBody));
 
   try {
     const resAllApps = await fetch(
@@ -21,7 +17,7 @@ export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
       }
     );
     if (!resAllApps.ok) {
-      console.log("Error caught in fetchAllApps");
+      console.log("Error caught in allAppsHandler");
       const errorUserAppsData = await resAllApps.json();
       if (
         Array.isArray(errorUserAppsData.errors) &&
@@ -42,7 +38,7 @@ export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
     }
     return { msg: "success", data: await resAllApps.json() };
   } catch (error: any) {
-    console.log("Catcging an error", error);
+    console.log("Error in allAppsHandler", error);
     return { msg: "error", data: { apps: [] } };
   }
 };
