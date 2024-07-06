@@ -109,7 +109,7 @@ export interface WatchlistContentTable {
   watchlist_id: string;
   user_id: string;
   watched: number;
-  date_added: ColumnType<Date, string | undefined, never>;;
+  date_added: ColumnType<Date, string | undefined, never>;
   media_name: string;
   year: string;
   rated: string;
