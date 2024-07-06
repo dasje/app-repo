@@ -8,7 +8,7 @@ export const allAppsHandler = async (fetchAppsBody: fetchAppsBody) => {
 
   try {
     const resAllApps = await fetch(
-      "https://" + process.env.NEXT_PUBLIC_VERCEL_URL + "/api/applications",
+      "http://" + process.env.NEXT_PUBLIC_VERCEL_URL + "/api/applications",
       {
         method: "POST",
         body: JSON.stringify(fetchAppsBody),
