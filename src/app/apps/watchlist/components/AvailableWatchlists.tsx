@@ -1,17 +1,87 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-"use server";
-import { UserType, getUser } from "@/app/lib/handlers/getUser";
-import { WatchlistContentTable } from "@/app/database/types";
+"use client";
+import { UserType } from "@/app/lib/handlers/getUser";
 import Watchlist from "./Watchlist";
-import { watchlistResponse } from "../page";
-import { watch } from "fs";
+import { useEffect, useState } from "react";
 
 interface AvailableWatchlists {
-  user: UserType;
-  watchlists: watchlistResponse;
+  currentUser: UserType;
 }
-const AvailableWatchlists = ({ user, watchlists }: AvailableWatchlists) => {
-  console.log("HERE ", watchlists);
+
+export type watchlistResponse = {
+  message: {
+    id: string;
+    watchlist_id: string;
+    user_id: string;
+    name: string;
+    created_at: string;
+    created_by: string;
+  }[];
+};
+
+const AvailableWatchlists = ({ currentUser }: AvailableWatchlists) => {
+  const [watchlists, setWatchlists] = useState<watchlistResponse>();
+  const [user, setUser] = useState<UserType>(currentUser);
+  const [deleteWatchlist, setDeleteWatchlist] = useState<boolean | string>(
+    false
+  );
+
+  useEffect(() => {
+    const getWatchlists = async () => {
+      var userLists: watchlistResponse;
+      user &&
+        (await fetch(
+          process.env.NEXT_PUBLIC_URL + "/api/watchlist/user-watchlists",
+          {
+            method: "POST",
+            body: JSON.stringify({ userEmail: user.email }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        ).then(async (res) => {
+          if (res.status !== 200) {
+            console.log("Error caught");
+            userLists = { message: [] };
+          } else {
+            userLists = await res.json();
+            console.log("Success fetching user lists", userLists);
+            setWatchlists(userLists);
+          }
+        }));
+    };
+    getWatchlists();
+  }, [user, deleteWatchlist]);
+
+  useEffect(() => {
+    const deleteList = async () => {
+      await fetch(
+        process.env.NEXT_PUBLIC_URL + "/api/watchlist/remove-watchlist",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            userEmail: user.email,
+            watchlistId: deleteWatchlist,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((res) => {
+        if (res.status === 403) {
+          // TODO: handle user permission error
+        } else if (res.status === 200) {
+          setDeleteWatchlist(false);
+        }
+      });
+    };
+    typeof deleteWatchlist === "string" && deleteList();
+  }, [deleteWatchlist]);
+
+  const triggerDeleteWatchlist = (watchlistId: string) => {
+    setDeleteWatchlist(watchlistId);
+  };
+
   return (
     <>
       {watchlists &&
@@ -21,6 +91,7 @@ const AvailableWatchlists = ({ user, watchlists }: AvailableWatchlists) => {
             user={user}
             watchlistId={i.watchlist_id}
             watchlistName={i.name}
+            deleteWatchlist={triggerDeleteWatchlist}
           />
         ))}
     </>
