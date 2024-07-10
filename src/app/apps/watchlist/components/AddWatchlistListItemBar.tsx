@@ -29,9 +29,6 @@ const AddWatchlistListItemBar = ({
   showSearchBox,
   setShowSearchBox,
 }: AddWatchlistListItemBarInterface) => {
-  const [watchlistContent, setWatchlistContent] = useState<
-    WatchlistContentTable[]
-  >([]);
   const [searchValue, setSearchValue] = useState<string>("");
   const [omdbRes, setOmdbRes] = useState<OMDBResSchema | null>();
   const [submitNewListItem, setSubmitNewListItem] = useState<boolean>(false);

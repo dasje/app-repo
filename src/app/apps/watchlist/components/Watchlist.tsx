@@ -55,8 +55,6 @@ const Watchlist = ({
         } else {
           const parsedRes = await res.json();
           setWatchlistContent(parsedRes.message);
-          //   setSearchValue("");
-          //   setSearchForTitle(false);
           console.log("Success fetching user lists", watchlistContent);
           console.log("LIST", parsedRes);
         }
@@ -92,6 +90,7 @@ const Watchlist = ({
       (res) => res.message === "success" && setFetchListValues(!fetchListValues)
     );
   };
+
   return (
     <>
       <div className="m-6 rounded bg-white flex flex-grow justify-center">

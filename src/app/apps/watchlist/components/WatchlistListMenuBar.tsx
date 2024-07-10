@@ -27,17 +27,32 @@ const WatchlistListMenuBar = ({
       </div>
       <div className="col-span-1 self-center space-x-2">
         <Button isIconOnly onPress={() => {}}>
-          <Image src={addUserIcon} alt="Delete list" height={15} width={15} />
+          <Image
+            src={addUserIcon}
+            alt="Add user button"
+            height={15}
+            width={15}
+          />
         </Button>
       </div>
       <div className="col-span-1 self-center  space-x-2">
         <Button isIconOnly onPress={() => {}}>
-          <Image src={deleteIcon} alt="Delete list" height={15} width={15} />
+          <Image
+            src={deleteIcon}
+            alt="Delete watchlist button"
+            height={15}
+            width={15}
+          />
         </Button>
       </div>
       <div className="col-span-1 self-center">
         <Button isIconOnly onPress={onOpenChange}>
-          <Image src={backIcon} alt="Delete list" height={15} width={15} />
+          <Image
+            src={backIcon}
+            alt="Close watchlist button"
+            height={15}
+            width={15}
+          />
         </Button>
       </div>
     </div>
