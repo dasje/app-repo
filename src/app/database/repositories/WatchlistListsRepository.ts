@@ -66,12 +66,32 @@ export async function createWatchlistList(watchlistList: NewWatchlistLists) {
   return addedList[0];
 }
 
-export async function deleteWatchlistList(id: string) {
+export type deleteWatchlistMessage = {
+  message: string;
+  watchlistList: {
+    id: string;
+    name: string;
+    created_at: Date;
+    created_by: string;
+  };
+};
+
+export async function deleteWatchlistList(userId: string, id: string) {
   const watchlistList = await findWatchlistListById(id);
+  let message: string;
 
-  if (watchlistList) {
+  if (!watchlistList) {
+    message = "watchlist_not_found";
+  } else if (watchlistList.created_by === userId) {
     await db.deleteFrom("watchlist_lists").where("id", "=", id).execute();
+    message = "watchlist_deleted";
+  } else {
+    message = "user_does_not_have_permission";
   }
+  const watchlistDeleteRes: deleteWatchlistMessage = {
+    message,
+    watchlistList,
+  };
 
-  return watchlistList;
+  return watchlistDeleteRes;
 }
