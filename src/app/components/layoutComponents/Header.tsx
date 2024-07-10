@@ -3,16 +3,12 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
 } from "@nextui-org/navbar";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import Logo from "@/app/lib/images/badger-logo.jpg";
 import Image from "next/image";
 import { auth, signOut } from "@/auth";
-import { useEffect } from "react";
 
 const Header = async () => {
   const session = await auth();
@@ -46,7 +42,7 @@ const Header = async () => {
       <NavbarContent justify="end">
         {!user && (
           <>
-            <NavbarItem className="hidden lg:flex">
+            <NavbarItem className="lg:flex">
               <Link href="/login/login">
                 <div>Login</div>
               </Link>
