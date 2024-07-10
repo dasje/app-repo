@@ -21,6 +21,7 @@ const addAppHandler = async (userEmail: string, appId: string) => {
     headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-store",
   });
 };
 
