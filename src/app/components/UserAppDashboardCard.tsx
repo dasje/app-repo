@@ -3,7 +3,6 @@
 import { Button, Card, CardBody, CardFooter } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 interface UserAppDashboardCardInterface {
   appLink: string;
@@ -21,6 +20,7 @@ const addAppHandler = async (userEmail: string, appId: string) => {
     headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-store",
   });
 };
 
