@@ -1,14 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { UserType, getUser } from "@/app/lib/handlers/getUser";
-import { WatchlistContentTable } from "@/app/database/types";
+import { UserType } from "@/app/lib/handlers/getUser";
 import Watchlist from "./Watchlist";
-import { watchlistResponse } from "../page";
-import { watch } from "fs";
 import { useEffect, useState } from "react";
 
 interface AvailableWatchlists {
-  user: UserType;
+  currentUser: UserType;
 }
 
 export type watchlistResponse = {
@@ -22,8 +19,12 @@ export type watchlistResponse = {
   }[];
 };
 
-const AvailableWatchlists = ({ user }: AvailableWatchlists) => {
+const AvailableWatchlists = ({ currentUser }: AvailableWatchlists) => {
   const [watchlists, setWatchlists] = useState<watchlistResponse>();
+  const [user, setUser] = useState<UserType>(currentUser);
+  const [deleteWatchlist, setDeleteWatchlist] = useState<boolean | string>(
+    false
+  );
 
   useEffect(() => {
     const getWatchlists = async () => {
@@ -52,6 +53,36 @@ const AvailableWatchlists = ({ user }: AvailableWatchlists) => {
     getWatchlists();
   }, [user]);
 
+  useEffect(() => {
+    const deleteList = async () => {
+      await fetch(
+        process.env.NEXT_PUBLIC_URL + "/api/watchlist/remove-watchlists",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            userEmail: user.email,
+            watchlistId: deleteWatchlist,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((res) => {
+        if (res.status === 403) {
+          // TODO: handle user permission error
+        } else if (res.status === 200) {
+          setDeleteWatchlist(false);
+          setUser(user);
+        }
+      });
+    };
+    typeof deleteWatchlist === "string" && deleteList();
+  }, [deleteWatchlist]);
+
+  const triggerDeleteWatchlist = (watchlistId: string) => {
+    setDeleteWatchlist(watchlistId);
+  };
+
   return (
     <>
       {watchlists &&
@@ -61,6 +92,7 @@ const AvailableWatchlists = ({ user }: AvailableWatchlists) => {
             user={user}
             watchlistId={i.watchlist_id}
             watchlistName={i.name}
+            deleteWatchlist={triggerDeleteWatchlist}
           />
         ))}
     </>
