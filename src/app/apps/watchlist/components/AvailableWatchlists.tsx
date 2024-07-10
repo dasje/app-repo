@@ -51,12 +51,12 @@ const AvailableWatchlists = ({ currentUser }: AvailableWatchlists) => {
         }));
     };
     getWatchlists();
-  }, [user]);
+  }, [user, deleteWatchlist]);
 
   useEffect(() => {
     const deleteList = async () => {
       await fetch(
-        process.env.NEXT_PUBLIC_URL + "/api/watchlist/remove-watchlists",
+        process.env.NEXT_PUBLIC_URL + "/api/watchlist/remove-watchlist",
         {
           method: "POST",
           body: JSON.stringify({
@@ -72,7 +72,6 @@ const AvailableWatchlists = ({ currentUser }: AvailableWatchlists) => {
           // TODO: handle user permission error
         } else if (res.status === 200) {
           setDeleteWatchlist(false);
-          setUser(user);
         }
       });
     };

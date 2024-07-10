@@ -23,12 +23,14 @@ interface WatchlistInterface {
   user: UserType;
   watchlistName: string;
   watchlistId: string;
+  deleteWatchlist: (watchlistId: string) => void;
 }
 
 const Watchlist = ({
   user,
   watchlistName,
   watchlistId,
+  deleteWatchlist,
 }: WatchlistInterface) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [fetchListValues, setFetchListValues] = useState<boolean>(false);
@@ -70,6 +72,8 @@ const Watchlist = ({
           onOpenChange={onOpenChange}
           showSearchBox={showSearchBox}
           setShowSearchBox={setShowSearchBox}
+          deleteTrigger={deleteWatchlist}
+          watchlistId={watchlistId}
         />
       )}
       {showSearchBox && (

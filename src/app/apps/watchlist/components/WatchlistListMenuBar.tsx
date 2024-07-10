@@ -11,12 +11,16 @@ interface WatchlistListMenuBarInterface {
   onOpenChange: () => void;
   showSearchBox: boolean;
   setShowSearchBox: Dispatch<SetStateAction<boolean>>;
+  deleteTrigger: (watchlistId: string) => void;
+  watchlistId: string;
 }
 
 const WatchlistListMenuBar = ({
   onOpenChange,
   showSearchBox,
   setShowSearchBox,
+  deleteTrigger,
+  watchlistId,
 }: WatchlistListMenuBarInterface) => {
   return (
     <div className="grid grid-cols-8 p-4 space-x-2">
@@ -36,7 +40,13 @@ const WatchlistListMenuBar = ({
         </Button>
       </div>
       <div className="col-span-1 self-center  space-x-2">
-        <Button isIconOnly onPress={() => {}}>
+        <Button
+          isIconOnly
+          onPress={() => {
+            deleteTrigger(watchlistId);
+            onOpenChange();
+          }}
+        >
           <Image
             src={deleteIcon}
             alt="Delete watchlist button"
