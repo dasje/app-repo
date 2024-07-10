@@ -45,6 +45,12 @@ const Login = () => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13) {
+      handleLoginRequest();
+    }
+  };
+
   return (
     <Card className="md:w-[400px]">
       <CardHeader className="flex gap-3">
@@ -68,6 +74,7 @@ const Login = () => {
             setErrorMessage(null);
           }}
           onClear={() => setLoginEmailValue("")}
+          onKeyDown={(e) => handleKeyPress(e)}
         />
         <Input
           label="Password"
@@ -104,6 +111,9 @@ const Login = () => {
           }
           type={isVisible ? "text" : "password"}
           className="max-w-xs"
+          onKeyDown={(e) => {
+            handleKeyPress(e);
+          }}
         />
         {errorMessage && <div className="text-red-600">{errorMessage}</div>}
       </CardBody>
