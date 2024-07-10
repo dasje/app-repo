@@ -20,10 +20,9 @@ const Signup = () => {
   const [signupPasswordValue, setSignupPasswordValue] = useState<string>("");
   const [signupRepeatPasswordValue, setSignupRepeatPasswordValue] =
     useState<string>("");
-  const [signupNameValid, setSignupNameValid] = useState<boolean>(false);
-  const [signupEmailValid, setSignupEmailValid] = useState<boolean>(false);
-  const [signupPasswordValid, setSignupPasswordValid] =
-    useState<boolean>(false);
+  const [signupNameValid, setSignupNameValid] = useState<boolean>(true);
+  const [signupEmailValid, setSignupEmailValid] = useState<boolean>(true);
+  const [signupPasswordValid, setSignupPasswordValid] = useState<boolean>(true);
   const [signupProcessing, setSignupProcessing] = useState<boolean>(false);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -39,7 +38,6 @@ const Signup = () => {
         passwordConfirm: signupRepeatPasswordValue,
       };
       const res = await signupHandler(signupBody);
-      console.log(res);
       res.msg === "success" &&
         signIn(undefined, { callbackUrl: "/login/login" });
       if (res.msg === "error") {
