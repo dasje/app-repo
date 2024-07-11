@@ -19,7 +19,6 @@ import { removeWatchlistItemHandler } from "@/app/lib/handlers/removeWatchlistIt
 import { updateWatchlistItemStatusHandler } from "@/app/lib/handlers/updateWatchlistItemStatusHandler";
 import WatchlistListMenuBar from "./WatchlistListMenuBar";
 import AddWatchlistListItemBar from "./AddWatchlistListItemBar";
-import { useWatchlistItems } from "@/app/lib/handlers/useWatchlistItems";
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "@/app/lib/handlers/swrFetcher";
 
