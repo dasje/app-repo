@@ -35,6 +35,7 @@ const Login = () => {
       setLoginProcessing(false);
       if (!res?.error) {
         router.push(callbackUrl);
+        window.location.reload();
       } else {
         setErrorMessage("Incorrect email or password.");
       }

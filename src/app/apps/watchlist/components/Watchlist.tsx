@@ -19,6 +19,9 @@ import { removeWatchlistItemHandler } from "@/app/lib/handlers/removeWatchlistIt
 import { updateWatchlistItemStatusHandler } from "@/app/lib/handlers/updateWatchlistItemStatusHandler";
 import WatchlistListMenuBar from "./WatchlistListMenuBar";
 import AddWatchlistListItemBar from "./AddWatchlistListItemBar";
+import { useWatchlistItems } from "@/app/lib/handlers/useWatchlistItems";
+import useSWR, { useSWRConfig } from "swr";
+import { fetcher } from "@/app/lib/handlers/swrFetcher";
 
 interface WatchlistInterface {
   user: UserType;
@@ -40,29 +43,17 @@ const Watchlist = ({
   >([]);
   const [showSearchBox, setShowSearchBox] = useState<boolean>(false);
 
+  const { mutate } = useSWRConfig();
+
+  const { data, error, isLoading } = useSWR(
+    `${process.env.NEXT_PUBLIC_URL}/api/watchlist/watchlist-items/${watchlistId}`,
+    fetcher,
+    { refreshInterval: 500 }
+  );
+
   useEffect(() => {
-    const fetchWatchlistValues = async () => {
-      await fetch(
-        process.env.NEXT_PUBLIC_URL + "/api/watchlist/watchlist-items",
-        {
-          method: "POST",
-          body: JSON.stringify({ watchlistId }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ).then(async (res) => {
-        if (res.status !== 200) {
-          console.log("Error caught");
-          setWatchlistContent([]);
-        } else {
-          const parsedRes = await res.json();
-          setWatchlistContent(parsedRes.message);
-        }
-      });
-    };
-    fetchWatchlistValues();
-  }, [fetchListValues]);
+    data && setWatchlistContent(data["message"]);
+  }, [data]);
 
   const addContent = (
     <>
@@ -108,7 +99,7 @@ const Watchlist = ({
             className="m-4"
             isOpen={isOpen}
             onOpenChange={() => {
-              setFetchListValues(!fetchListValues);
+              //   setFetchListValues(!fetchListValues);
               onOpenChange();
             }}
             backdrop="blur"
@@ -156,7 +147,9 @@ const Watchlist = ({
                                 itemId: item.id,
                                 watchStatus: isSelected ? 1 : 0,
                               });
-                              setFetchListValues(!fetchListValues);
+                              mutate(
+                                `${process.env.NEXT_PUBLIC_URL}/api/watchlist/watchlist-items/${watchlistId}`
+                              );
                             }}
                           >
                             <div className="w-full flex justify-between gap-2">
