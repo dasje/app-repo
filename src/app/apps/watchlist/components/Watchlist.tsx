@@ -9,6 +9,7 @@ import {
   useDisclosure,
   Modal,
   ModalContent,
+  User,
 } from "@nextui-org/react";
 import { ListboxWrapper } from "@/app/components/ListboxWrapper";
 import Image from "next/image";
@@ -57,8 +58,6 @@ const Watchlist = ({
         } else {
           const parsedRes = await res.json();
           setWatchlistContent(parsedRes.message);
-          console.log("Success fetching user lists", watchlistContent);
-          console.log("LIST", parsedRes);
         }
       });
     };
@@ -100,14 +99,7 @@ const Watchlist = ({
       <div className="m-6 rounded bg-white flex flex-grow justify-center">
         <ListboxWrapper>
           <div className="rounded-none flex justify-center">
-            {/* <div className="col-span-1"> */}
-            <Button
-              // className="rounded-none border border-solid flex justify-center p-4"
-              onPress={onOpen}
-              size="lg"
-              fullWidth
-              variant="ghost"
-            >
+            <Button onPress={onOpen} size="lg" fullWidth variant="ghost">
               {watchlistName}
             </Button>
             {/* </div> */}
@@ -122,6 +114,7 @@ const Watchlist = ({
             backdrop="blur"
             placement="top-center"
             hideCloseButton={true}
+            size="lg"
           >
             <ModalContent>
               {(onClose) => (
@@ -129,43 +122,51 @@ const Watchlist = ({
                   {addContent}
                   <ListboxWrapper>
                     <Listbox
-                      // topContent={addContent}
                       classNames={{
                         base: "w-full",
-                        list: "max-h-[300px] overflow-scroll",
+                        list: "overflow-scroll",
                       }}
                       items={watchlistContent}
                       label="Assigned to"
                       variant="flat"
                     >
                       {(item) => (
-                        <ListboxItem key={item.id} textValue={item.media_name}>
-                          <div className="flex flex-col">
-                            <span className="text-tiny text-default-400 grid grid-cols-8 gap-4">
-                              <Checkbox
-                                className="col-span-7"
-                                isSelected={item.watched === 1}
-                                lineThrough={item.watched === 1}
-                                onValueChange={(isSelected) => {
-                                  updateWatchlistItemStatusHandler({
-                                    itemId: item.id,
-                                    watchStatus: isSelected ? 1 : 0,
-                                  });
-                                  setFetchListValues(!fetchListValues);
-                                }}
-                              >
-                                {item.media_name}
-                              </Checkbox>
-                              <Image
-                                onClick={() => removeListItem(item.id)}
-                                className="col-span-1 justify-self-end"
-                                src={deleteIcon}
-                                height={20}
-                                width={20}
-                                alt="Delete item"
+                        <ListboxItem
+                          key={item.id}
+                          endContent={
+                            <Image
+                              onClick={() => removeListItem(item.id)}
+                              className="col-span-1 justify-self-end"
+                              src={deleteIcon}
+                              height={20}
+                              width={20}
+                              alt="Delete item"
+                            />
+                          }
+                        >
+                          <Checkbox
+                            aria-label={item.media_name}
+                            classNames={{
+                              label: "w-full",
+                            }}
+                            isSelected={item.watched === 1}
+                            color={item.watched === 1 ? "success" : "default"}
+                            onValueChange={(isSelected) => {
+                              updateWatchlistItemStatusHandler({
+                                itemId: item.id,
+                                watchStatus: isSelected ? 1 : 0,
+                              });
+                              setFetchListValues(!fetchListValues);
+                            }}
+                          >
+                            <div className="w-full flex justify-between gap-2">
+                              <User
+                                avatarProps={{ size: "md", src: item.poster }}
+                                description={`${item.year} - ${item.runtime}`}
+                                name={item.media_name}
                               />
-                            </span>
-                          </div>
+                            </div>
+                          </Checkbox>
                         </ListboxItem>
                       )}
                     </Listbox>
