@@ -2,13 +2,18 @@ import { Divider, Spinner } from "@nextui-org/react";
 import AppDashboardCard from "../AppDashboardCard";
 import { AppTable } from "@/app/database/types";
 import { UserType } from "@/app/lib/handlers/getUser";
-import { Suspense } from "react";
+import { Dispatch, SetStateAction, Suspense } from "react";
 
 interface AppDashboardInterface {
   appsRes: AppTable[];
   user: UserType;
+  triggerUserAppRefresh: Dispatch<SetStateAction<boolean>>;
 }
-const AppDashboard = ({ appsRes, user }: AppDashboardInterface) => {
+const AppDashboard = ({
+  appsRes,
+  user,
+  triggerUserAppRefresh,
+}: AppDashboardInterface) => {
   return (
     <>
       <div className="font-bold text-3xl text-center">
@@ -47,6 +52,7 @@ const AppDashboard = ({ appsRes, user }: AppDashboardInterface) => {
                           appByline={i.byline}
                           appId={i.id}
                           currentUser={user.email}
+                          triggerUserAppResfresh={triggerUserAppRefresh}
                         />
                       </div>
                     </Suspense>
