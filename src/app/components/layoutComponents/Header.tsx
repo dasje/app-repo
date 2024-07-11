@@ -9,20 +9,21 @@ import Link from "next/link";
 import Logo from "@/app/lib/images/badger-logo.jpg";
 import Image from "next/image";
 import { auth, signOut } from "@/auth";
+import { redirect } from "next/navigation";
 
 const Header = async () => {
   const session = await auth();
   const user = session?.user;
-
   const logoutAction = async () => {
     "use server";
     await signOut();
+    redirect("/");
   };
 
   return (
     <Navbar position="static">
       <NavbarBrand className="gap-4">
-        <Link href="/">
+        <Link href="/apps">
           <Image src={Logo} alt="badger-logo" width={50} height={50} />
         </Link>
         <p className="font-bold text-inherit">Badger Apps</p>
