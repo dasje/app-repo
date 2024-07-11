@@ -1,6 +1,5 @@
 export function passwordValidation(password: string) {
-  if (password.length < 8) {
-    return false;
-  }
-  return true;
+  const expression: RegExp =
+    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
+  return expression.test(password);
 }
