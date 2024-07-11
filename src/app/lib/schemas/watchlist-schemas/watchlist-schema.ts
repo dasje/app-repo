@@ -108,3 +108,14 @@ export const selectWatchlistItemSchema = object({
 });
 
 export type WatchlistItem = TypeOf<typeof selectWatchlistItemSchema>;
+
+export const deleteWatchlistSchema = object({
+  watchlistId: string({
+    required_error: "Watchlist ID is required",
+  }).min(1, "Watchlist ID is required"),
+  userEmail: string({
+    required_error: "User email is required",
+  }).min(1, "User email is required"),
+});
+
+export type Watchlist = TypeOf<typeof deleteWatchlistSchema>;
