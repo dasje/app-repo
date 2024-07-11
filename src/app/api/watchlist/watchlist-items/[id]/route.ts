@@ -1,10 +1,14 @@
 import { getWatchlistContentSchema } from "@/app/lib/schemas/watchlist-schemas/watchlist-schema";
 import { findWatchlistContent } from "@/app/database/repositories/WatchlistContentRepository";
 
-export async function POST(req: Request) {
+type Params = {
+  id: string;
+};
+
+export async function GET(request: Request, context: { params: Params }) {
+  const watchlistId = context.params.id;
   var items;
   try {
-    const { watchlistId } = getWatchlistContentSchema.parse(await req.json());
     items = await findWatchlistContent({
       watchlist_id: watchlistId,
     });

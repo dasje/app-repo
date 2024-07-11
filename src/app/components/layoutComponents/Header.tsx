@@ -3,30 +3,27 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
 } from "@nextui-org/navbar";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import Logo from "@/app/lib/images/badger-logo.jpg";
 import Image from "next/image";
 import { auth, signOut } from "@/auth";
-import { useEffect } from "react";
+import { redirect } from "next/navigation";
 
 const Header = async () => {
   const session = await auth();
   const user = session?.user;
-
   const logoutAction = async () => {
     "use server";
     await signOut();
+    window.location.reload();
   };
 
   return (
     <Navbar position="static">
       <NavbarBrand className="gap-4">
-        <Link href="/">
+        <Link href="/apps">
           <Image src={Logo} alt="badger-logo" width={50} height={50} />
         </Link>
         <p className="font-bold text-inherit">Badger Apps</p>
@@ -46,7 +43,7 @@ const Header = async () => {
       <NavbarContent justify="end">
         {!user && (
           <>
-            <NavbarItem className="hidden lg:flex">
+            <NavbarItem className="lg:flex">
               <Link href="/login/login">
                 <div>Login</div>
               </Link>

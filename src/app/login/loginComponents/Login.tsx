@@ -35,6 +35,7 @@ const Login = () => {
       setLoginProcessing(false);
       if (!res?.error) {
         router.push(callbackUrl);
+        window.location.reload();
       } else {
         setErrorMessage("Incorrect email or password.");
       }
@@ -42,6 +43,12 @@ const Login = () => {
       setErrorMessage(error.message);
     } finally {
       setLoginProcessing(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13) {
+      handleLoginRequest();
     }
   };
 
@@ -68,6 +75,7 @@ const Login = () => {
             setErrorMessage(null);
           }}
           onClear={() => setLoginEmailValue("")}
+          onKeyDown={(e) => handleKeyPress(e)}
         />
         <Input
           label="Password"
@@ -104,6 +112,9 @@ const Login = () => {
           }
           type={isVisible ? "text" : "password"}
           className="max-w-xs"
+          onKeyDown={(e) => {
+            handleKeyPress(e);
+          }}
         />
         {errorMessage && <div className="text-red-600">{errorMessage}</div>}
       </CardBody>
