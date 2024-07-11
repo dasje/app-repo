@@ -17,7 +17,7 @@ const Header = async () => {
   const logoutAction = async () => {
     "use server";
     await signOut();
-    redirect("/");
+    window.location.reload();
   };
 
   return (
