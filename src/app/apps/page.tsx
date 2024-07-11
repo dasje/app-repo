@@ -24,6 +24,8 @@ export default function Page() {
 
   const [userApps, setUserApps] = useState<AppTable[]>([]);
   const [appsRes, setApps] = useState<ResDataType<string, AppTable[]>>();
+  const [triggerRefreshUserApps, setTriggerRefreshUserApps] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +58,7 @@ export default function Page() {
       }
     };
     fetchData();
-  }, [user]);
+  }, [user, triggerRefreshUserApps]);
 
   return (
     <>
@@ -77,6 +79,7 @@ export default function Page() {
               <AppDashboard
                 appsRes={Array.isArray(appsRes.data.apps) && appsRes.data.apps}
                 user={user}
+                triggerUserAppRefresh={setTriggerRefreshUserApps}
               />
             )}
           </div>

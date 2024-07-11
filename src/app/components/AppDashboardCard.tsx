@@ -4,6 +4,7 @@ import { Button, Card, CardBody, CardFooter } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface AppDashboardCardInterface {
   appLink: string;
@@ -12,18 +13,8 @@ interface AppDashboardCardInterface {
   appByline: string;
   appId: string;
   currentUser: string;
+  triggerUserAppResfresh: Dispatch<SetStateAction<boolean>>;
 }
-
-const addAppHandler = async (userEmail: string, appId: string) => {
-  await fetch("/api/add-user-app", {
-    method: "POST",
-    body: JSON.stringify({ userEmail: userEmail, appId: appId }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    cache: "no-store",
-  });
-};
 
 const AppDashboardCard = ({
   appLink,
@@ -32,8 +23,20 @@ const AppDashboardCard = ({
   appByline,
   appId,
   currentUser,
+  triggerUserAppResfresh,
 }: AppDashboardCardInterface) => {
   const router = useRouter();
+  const [addNewAppLoading, setAddNewAppLoading] = useState<boolean>(false);
+  const addAppHandler = async (userEmail: string, appId: string) => {
+    await fetch("/api/add-user-app", {
+      method: "POST",
+      body: JSON.stringify({ userEmail: userEmail, appId: appId }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
+  };
   return (
     <div className="p-4">
       <Card isFooterBlurred radius="lg" className="border-none">
@@ -68,9 +71,14 @@ const AppDashboardCard = ({
               color="default"
               radius="lg"
               size="sm"
+              isLoading={addNewAppLoading}
               onPress={() => {
-                addAppHandler(currentUser, appId);
-                router.refresh();
+                setAddNewAppLoading(!addNewAppLoading);
+                addAppHandler(currentUser, appId).then(() => {
+                  setAddNewAppLoading(!addNewAppLoading);
+                  triggerUserAppResfresh(true);
+                  setAddNewAppLoading(!addNewAppLoading);
+                });
               }}
             >
               Add
