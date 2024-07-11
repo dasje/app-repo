@@ -90,6 +90,7 @@ const Signup = () => {
           isClearable
           value={signupEmailValue}
           isInvalid={!signupEmailValid}
+          errorMessage="This is not a valid email."
           onChange={(e) => {
             setSignupEmailValue(e.target.value);
             setSignupEmailValid(emailValidation(e.target.value));
@@ -103,6 +104,7 @@ const Signup = () => {
           placeholder="Enter your password"
           color="secondary"
           isInvalid={!signupPasswordValid}
+          errorMessage="Password must contain one digit from 1 to 9, one lowercase letter, one uppercase letter, one special character, no space, and it must be 8-16 characters long."
           value={signupPasswordValue}
           onChange={(e) => {
             setSignupPasswordValue(e.target.value);
