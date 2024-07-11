@@ -18,7 +18,7 @@ const AppDashboard = ({ appsRes, user }: AppDashboardInterface) => {
               Add an app
             </div>
             <Divider />
-            <div className="container min-w-screen max-h-60 md:max-h-80 overflow-y-hidden overflow-y-scroll scrolling-auto scrolling-touch">
+            <div className="container min-w-screen max-h-80 md:max-h-80 overflow-y-hidden overflow-y-scroll scrolling-auto scrolling-touch">
               <div className="grid grid-cols-1 md:grid-cols-6">
                 {appsRes &&
                   Array.isArray(appsRes) &&
