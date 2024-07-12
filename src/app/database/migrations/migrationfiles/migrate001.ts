@@ -17,6 +17,24 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
+    .createTable("user_connections")
+    .ifNotExists()
+    .addColumn("id", "varchar(255)", (col) =>
+      col.primaryKey().defaultTo(sql`UUID()`)
+    )
+    .addColumn("user_id", "varchar(255)", (col) =>
+      col.references("User.id").onDelete("cascade").notNull()
+    )
+    .addColumn("friend_id", "varchar(255)", (col) => col.references("User.id"))
+    .addColumn("invite_code", "varchar(255)", (col) => col.notNull())
+    .addColumn("invite_date", "text", (col) =>
+      col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+    )
+    .addColumn("connection_date", "text")
+    .addColumn("connected", "boolean", (col) => col.notNull())
+    .execute();
+
+  await db.schema
     .createTable("Account")
     .ifNotExists()
     .addColumn("id", "varchar(255)", (col) =>
