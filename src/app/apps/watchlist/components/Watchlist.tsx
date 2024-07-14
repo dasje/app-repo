@@ -11,7 +11,6 @@ import {
   ModalContent,
   User,
 } from "@nextui-org/react";
-import { ListboxWrapper } from "@/app/components/ListboxWrapper";
 import Image from "next/image";
 import deleteIcon from "@/app/lib/icons/icons8-delete-120.png";
 import { WatchlistContentTable } from "@/app/database/types";
@@ -21,12 +20,14 @@ import WatchlistListMenuBar from "./WatchlistListMenuBar";
 import AddWatchlistListItemBar from "./AddWatchlistListItemBar";
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "@/app/lib/handlers/swrFetcher";
+import { ListboxWrapper } from "@/app/components/layoutComponents/ListboxWrapper";
 
 interface WatchlistInterface {
   user: UserType;
   watchlistName: string;
   watchlistId: string;
   deleteWatchlist: (watchlistId: string) => void;
+  owner: boolean;
 }
 
 const Watchlist = ({
@@ -34,6 +35,7 @@ const Watchlist = ({
   watchlistName,
   watchlistId,
   deleteWatchlist,
+  owner,
 }: WatchlistInterface) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [fetchListValues, setFetchListValues] = useState<boolean>(false);
@@ -63,6 +65,7 @@ const Watchlist = ({
           setShowSearchBox={setShowSearchBox}
           deleteTrigger={deleteWatchlist}
           watchlistId={watchlistId}
+          user={user}
         />
       )}
       {showSearchBox && (
@@ -86,8 +89,8 @@ const Watchlist = ({
 
   return (
     <>
-      <div className="m-6 rounded bg-white flex flex-grow justify-center">
-        <ListboxWrapper>
+      <div className={`m-6 rounded bg-white flex flex-grow justify-center`}>
+        <ListboxWrapper owner={owner}>
           <div className="rounded-none flex justify-center">
             <Button onPress={onOpen} size="lg" fullWidth variant="ghost">
               {watchlistName}
@@ -110,7 +113,7 @@ const Watchlist = ({
               {(onClose) => (
                 <>
                   {addContent}
-                  <ListboxWrapper>
+                  <ListboxWrapper owner={false}>
                     <Listbox
                       classNames={{
                         base: "w-full",

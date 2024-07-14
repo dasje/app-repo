@@ -26,7 +26,8 @@ export interface UserConnectionsTable {
   id: string;
   user_id: string;
   friend_id: string | null;
-  invite_code: string;
+  friend_email: string;
+  invite_code: string | null;
   invite_date: ColumnType<Date, string | undefined>;
   connection_date: ColumnType<Date, string | undefined>;
   connected: number;
@@ -148,6 +149,8 @@ export interface WatchlistUserMapTable {
   id: string;
   watchlist_id: string;
   user_id: string;
+  role: "owner" | "friend";
+  added_date: Date;
 }
 export type WatchlistUserMap = Selectable<WatchlistUserMapTable>;
 export type NewWatchlistUserMap = Insertable<WatchlistUserMapTable>;

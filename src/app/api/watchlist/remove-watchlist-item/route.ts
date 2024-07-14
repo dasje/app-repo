@@ -1,11 +1,4 @@
-import { findUser } from "@/app/database/repositories/UserRepository";
-import {
-  addWatchlistSchema,
-  selectWatchlistItemSchema,
-} from "@/app/lib/schemas/watchlist-schemas/watchlist-schema";
-import { createWatchlistList } from "@/app/database/repositories/WatchlistListsRepository";
-import { createWatchlistUserMap } from "@/app/database/repositories/WatchlistUserMapRepository";
-import { WatchlistListsTable } from "@/app/database/types";
+import { selectWatchlistItemSchema } from "@/app/lib/schemas/watchlist-schemas/watchlist-schema";
 import { deleteWatchlistContentItem } from "@/app/database/repositories/WatchlistContentRepository";
 
 export async function POST(req: Request) {

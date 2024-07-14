@@ -3,55 +3,39 @@
 import { UserType } from "@/app/lib/handlers/getUser";
 import Watchlist from "./Watchlist";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "@/app/lib/handlers/swrFetcher";
+import Loading from "../../loading";
 
 interface AvailableWatchlists {
   currentUser: UserType;
 }
 
 export type watchlistResponse = {
-  message: {
-    id: string;
-    watchlist_id: string;
-    user_id: string;
-    name: string;
-    created_at: string;
-    created_by: string;
-  }[];
-};
+  id: string;
+  watchlist_id: string;
+  user_id: string;
+  name: string;
+  created_at: string;
+  created_by: string;
+  role: "owner" | "friend";
+}[];
 
 const AvailableWatchlists = ({ currentUser }: AvailableWatchlists) => {
   const [watchlists, setWatchlists] = useState<watchlistResponse>();
-  const [user, setUser] = useState<UserType>(currentUser);
   const [deleteWatchlist, setDeleteWatchlist] = useState<boolean | string>(
     false
   );
 
+  const { data, error, isLoading } = useSWR(
+    `${process.env.NEXT_PUBLIC_URL}/api/watchlist/user-watchlists/${currentUser.email}`,
+    fetcher,
+    { refreshInterval: 500 }
+  );
+
   useEffect(() => {
-    const getWatchlists = async () => {
-      var userLists: watchlistResponse;
-      user &&
-        (await fetch(
-          process.env.NEXT_PUBLIC_URL + "/api/watchlist/user-watchlists",
-          {
-            method: "POST",
-            body: JSON.stringify({ userEmail: user.email }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        ).then(async (res) => {
-          if (res.status !== 200) {
-            console.log("Error caught");
-            userLists = { message: [] };
-          } else {
-            userLists = await res.json();
-            console.log("Success fetching user lists", userLists);
-            setWatchlists(userLists);
-          }
-        }));
-    };
-    getWatchlists();
-  }, [user, deleteWatchlist]);
+    data && setWatchlists(data["message"]);
+  }, [data]);
 
   useEffect(() => {
     const deleteList = async () => {
@@ -60,7 +44,7 @@ const AvailableWatchlists = ({ currentUser }: AvailableWatchlists) => {
         {
           method: "POST",
           body: JSON.stringify({
-            userEmail: user.email,
+            userEmail: currentUser.email,
             watchlistId: deleteWatchlist,
           }),
           headers: {
@@ -84,14 +68,17 @@ const AvailableWatchlists = ({ currentUser }: AvailableWatchlists) => {
 
   return (
     <>
+      {isLoading && <Loading />}
+      {error && <div>{error}</div>}
       {watchlists &&
-        watchlists.message.map((i, k) => (
+        watchlists.map((i, k) => (
           <Watchlist
             key={k}
-            user={user}
+            user={currentUser}
             watchlistId={i.watchlist_id}
             watchlistName={i.name}
             deleteWatchlist={triggerDeleteWatchlist}
+            owner={i.role === "owner" ? true : false}
           />
         ))}
     </>
