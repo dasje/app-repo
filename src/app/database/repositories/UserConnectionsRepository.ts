@@ -13,6 +13,16 @@ export async function findUserConnectionById(id: string) {
     .executeTakeFirst();
 }
 
+export async function findInviteDetails(inviteId: string) {
+  return await db
+    .selectFrom("user_connections")
+    .where("user_connections.invite_code", "=", inviteId)
+    .innerJoin("User", "User.id", "user_connections.user_id")
+    // .innerJoin("User", "User.id", "user_connections.friend_id")
+    .selectAll()
+    .execute();
+}
+
 export async function findUserConnections(criteria: Partial<UserConnection>) {
   let query = db.selectFrom("user_connections");
 
@@ -41,7 +51,18 @@ export async function findUserFriendDetails(userId: string) {
     .where("user_connections.user_id", "=", userId)
     .where("user_connections.connected", "=", 1)
     .innerJoin("User", "User.id", "user_connections.friend_id")
-    .selectAll()
+    .select([
+      "user_connections.connected",
+      "user_connections.connection_date",
+      "user_connections.friend_email",
+      "user_connections.friend_id",
+      "user_connections.invite_code",
+      "user_connections.invite_date",
+      "user_connections.user_id",
+      "User.email",
+      "User.image",
+      "User.name",
+    ])
     .execute();
 }
 
@@ -61,7 +82,6 @@ export async function createUserConnection(userConnection: NewUserConnection) {
     .insertInto("user_connections")
     .values(userConnection)
     .executeTakeFirstOrThrow();
-  console.log("HEY", insertId);
   return await findUserConnections({
     user_id: userConnection.user_id,
     invite_code: userConnection.invite_code,

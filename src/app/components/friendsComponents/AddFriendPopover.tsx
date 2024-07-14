@@ -22,14 +22,25 @@ const AddFriendPopover = ({ user }: AddFriendPopoverInterface) => {
   const [friendEmail, setFriendEmail] = useState<string>(undefined);
   const [emailValid, setEmailValid] = useState<boolean>(undefined);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  useEffect(() => console.log("HERE IS THE USER 2", user), []);
 
   useEffect(() => {
     const submitEmail = async () => {
       console.log(friendEmail);
-      setFriendEmail(undefined);
-      setSubmitting(false);
+      const reqBody = { userEmail: user.email, friendEmail: friendEmail };
+      await fetch(process.env.NEXT_PUBLIC_URL + "/api/friend/send-invite", {
+        method: "POST",
+        body: JSON.stringify(reqBody),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        console.log(res.json());
+        setFriendEmail(undefined);
+        setSubmitting(false);
+      });
     };
-    submitting && submitEmail().then((res) => onOpenChange());
+    user && submitting && submitEmail().then((res) => onOpenChange());
   }, [submitting]);
 
   return (

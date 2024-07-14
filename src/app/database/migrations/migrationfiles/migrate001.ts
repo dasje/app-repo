@@ -26,7 +26,8 @@ export async function up(db: Kysely<any>): Promise<void> {
       col.references("User.id").onDelete("cascade").notNull()
     )
     .addColumn("friend_id", "varchar(255)", (col) => col.references("User.id"))
-    .addColumn("invite_code", "varchar(255)", (col) => col.notNull())
+    .addColumn("friend_email", "text", (col) => col.notNull())
+    .addColumn("invite_code", "varchar(255)")
     .addColumn("invite_date", "text", (col) =>
       col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
@@ -151,6 +152,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     .addColumn("user_id", "varchar(255)", (col) =>
       col.references("User.id").onDelete("cascade").notNull()
+    )
+    .addColumn("role", "text", (col) => col.notNull())
+    .addColumn("added_date", "text", (col) =>
+      col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
     .execute();
 

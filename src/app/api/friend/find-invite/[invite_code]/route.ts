@@ -1,4 +1,4 @@
-import { findUserConnections } from "@/app/database/repositories/UserConnectionsRepository";
+import { findInviteDetails } from "@/app/database/repositories/UserConnectionsRepository";
 
 type Params = {
   invite_code: string;
@@ -6,15 +6,12 @@ type Params = {
 
 export async function GET(request: Request, context: { params: Params }) {
   const inviteCode = context.params.invite_code;
+  console.log("Fetching invite code: ", inviteCode);
   var items;
   try {
-    items = await findUserConnections({
-      invite_code: inviteCode,
-    });
+    items = await findInviteDetails(inviteCode);
   } catch (error: any) {
     console.log("Error in friends/find-invite route.");
-    Array.isArray(error) &&
-      error.map((i, k) => console.log("Zod error: ", i.message));
     if (error.code === "ER_TOO_MANY_USER_CONNECTIONS") {
       console.log("Too many connections error.");
       return Response.json(
