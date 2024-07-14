@@ -119,3 +119,14 @@ export const deleteWatchlistSchema = object({
 });
 
 export type Watchlist = TypeOf<typeof deleteWatchlistSchema>;
+
+export const addWatchlistFriendSchema = object({
+  userEmail: string({
+    required_error: "User email is required",
+  }).min(1, "User email is required"),
+  friendEmail: string({
+    required_error: "Friend email is required",
+  }).min(1, "Friend email is required"),
+});
+
+export type WatchlistFriend = TypeOf<typeof addWatchlistFriendSchema>;
