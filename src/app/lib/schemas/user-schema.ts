@@ -1,4 +1,4 @@
-import { TypeOf, object, string } from "zod";
+import { TypeOf, number, object, string } from "zod";
 
 export const createUserSchema = object({
   name: string({ required_error: "Name is required" }).min(
@@ -69,9 +69,20 @@ export const updateFriendConnectionSchema = object({
   connectionDate: string({ required_error: "Connection date is required" })
     .min(1, "Connection date is required")
     .optional(),
-  connected: string({ required_error: "Connected value is required" })
-    .min(1, "Connected value is required")
-    .optional(),
+  connected: number({
+    required_error: "Connected value is required",
+  }).optional(),
 });
 
 export type UpdateFriendInput = TypeOf<typeof updateFriendConnectionSchema>;
+
+export const inviteFriendSchema = object({
+  userEmail: string({ required_error: "User email is required" })
+    .min(1, "User email is required")
+    .optional(),
+  friendEmail: string({ required_error: "Friend email is required" })
+    .min(1, "Friend email is required")
+    .optional(),
+});
+
+export type InviteFriend = TypeOf<typeof inviteFriendSchema>;
