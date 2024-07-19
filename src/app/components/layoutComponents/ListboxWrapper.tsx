@@ -9,7 +9,7 @@ export const ListboxWrapper = ({
 }: ListBoxWrapperInterface) => (
   <div
     className={`${
-      owner ? "bg-black text-white" : "bg-white"
+      owner ? "bg-gray-500" : "bg-white"
     } w-full md:max-w-[560px] md:h-full max-h-[800px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100`}
   >
     {children}
