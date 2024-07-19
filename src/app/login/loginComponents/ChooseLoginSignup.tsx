@@ -31,8 +31,8 @@ const ChooseLoginSignup = ({
         </div>
       </CardHeader>
       <Divider />
-      <CardBody className="gap-4">
-        <p>
+      <CardBody className="gap-4 ">
+        <p className="text-sm font-medium">
           {textToDisplay ? textToDisplay : "Log in or sign up to view apps."}
         </p>
       </CardBody>
