@@ -10,11 +10,11 @@ export const Features = () => {
   const router = useRouter();
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 place-content-center max-w-[850px] mt-[50px]">
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-4 place-content-center max-w-[850px] md:mt-[50px]">
         <div className="pt-4 flex flex-col gap-6">
           <span className="max-w-[400px] flex-row font-bold text-xl">
-            Welcome to the home of demos of Next.js applications built by Ben
-            Sweeney
+            Welcome to the home of Next.js application demos for apps built by
+            Ben Sweeney
           </span>
 
           <span className="max-w-[400px] text-lg">
@@ -65,7 +65,7 @@ export const Features = () => {
             </div>
           </div>
         </div>
-        <div className="flex-col items-center">
+        <div className="flex-col items-center hidden md:contents">
           <Image src={Badger} alt="mock alt" width={400} height={400} />
         </div>
       </div>
