@@ -1,5 +1,5 @@
 interface ListBoxWrapperInterface {
-  owner: boolean;
+  owner?: boolean;
   children: React.ReactNode;
 }
 
