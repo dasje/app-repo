@@ -84,12 +84,6 @@ const AddWatchlist = ({ user }: AddWatchlistInterface) => {
                   value={newListName}
                   onValueChange={(e) => setNewListName(e)}
                 />
-                <Input
-                  type="text"
-                  label="Add another user"
-                  placeholder="Enter the name of a user to share list with"
-                  isDisabled={true}
-                />
                 <div className="space-x-4">
                   <Button onPress={handleAddButton}>Add</Button>
                   <Button onPress={handleCancelAddButton}>Cancel</Button>
