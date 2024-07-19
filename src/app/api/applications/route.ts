@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { findAllApps } from "@/app/database/repositories/AppsRepository";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const currentApps = await findAllApps();
     console.log("Current apps", currentApps);
