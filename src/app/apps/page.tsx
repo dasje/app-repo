@@ -3,7 +3,6 @@
 
 import AppDashboard from "../components/layoutComponents/AppDashboard";
 import { getUser, UserType } from "../lib/handlers/getUser";
-import { Divider } from "@nextui-org/react";
 import { AppAccess, AppTable } from "../database/types";
 import { allAppsHandler } from "../lib/handlers/fetchAllApps";
 import { userAppsHandler } from "../lib/handlers/fetchUserApps";

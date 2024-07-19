@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { createUserSchema } from "@/app/lib/schemas/user-schema";
 import { ZodError } from "zod";
 import { createUser } from "@/app/database/repositories/UserRepository";
-import { encryptPassword } from "@/app/lib/auth/passwordAuthentication";
+import { encryptPassword } from "@/app/lib/handlers/auth_handlers/passwordAuthentication";
 
 export async function POST(req: Request) {
   try {

@@ -1,5 +1,5 @@
 import { findUser } from "@/app/database/repositories/UserRepository";
-import { verifyPassword } from "@/app/lib/auth/passwordAuthentication";
+import { verifyPassword } from "@/app/lib/handlers/auth_handlers/passwordAuthentication";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { KyselyAdapter } from "@auth/kysely-adapter";

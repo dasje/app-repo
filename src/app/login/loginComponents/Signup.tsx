@@ -15,8 +15,8 @@ import { useState } from "react";
 import EyeFilledIcon from "@/app/lib/icons/eye_show_filled_icon_201405.png";
 import EyeSlashFilledIcon from "@/app/lib/icons/eye_hide_filled_icon_200618.png";
 import Image from "next/image";
-import { emailValidation } from "../../lib/auth/emailValidation";
-import { passwordValidation } from "../../lib/auth/passwordValidation";
+import { emailValidation } from "../../lib/handlers/auth_handlers/emailValidation";
+import { passwordValidation } from "../../lib/handlers/auth_handlers/passwordValidation";
 import { signIn } from "next-auth/react";
 import { signupHandler } from "@/app/lib/handlers/signupHandler";
 
