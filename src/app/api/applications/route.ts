@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import { findAllApps } from "@/app/database/repositories/AppsRepository";
 
-export async function POST() {
+export async function GET() {
   try {
     const currentApps = await findAllApps();
-    console.log("CA ", currentApps);
-
-    return Response.json({ apps: currentApps });
+    console.log("Current apps", currentApps);
+    return Response.json(currentApps);
   } catch (error: any) {
     console.log(error);
     return NextResponse.json(

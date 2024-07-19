@@ -18,7 +18,7 @@ const AppDashboard = ({
   return (
     <>
       <div className="font-bold text-3xl text-center">
-        {Array.isArray(appsRes) && appsRes.length > 0 ? (
+        {appsRes && appsRes.length > 0 ? (
           <>
             <div className="self-center tracking-wide font-bold text-lg p-4">
               Add an app
@@ -29,8 +29,6 @@ const AppDashboard = ({
               <AppBoxWrapper>
                 <div className="grid grid-cols-1 md:grid-cols-6">
                   {appsRes &&
-                    Array.isArray(appsRes) &&
-                    appsRes.length > 0 &&
                     appsRes.map((i: AppTable, k) => (
                       <Suspense
                         key={k}
@@ -64,6 +62,8 @@ const AppDashboard = ({
               </AppBoxWrapper>
             </div>
           </>
+        ) : appsRes.length === 0 ? (
+          <></>
         ) : (
           <div className="font-bold text-3xl text-center grid-cols-4">
             <div className="self-center tracking-wide font-bold text-lg p-4">
