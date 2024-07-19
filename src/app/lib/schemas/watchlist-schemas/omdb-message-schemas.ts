@@ -4,7 +4,9 @@ export type findByNameSchema = {
   mediaName: string;
 };
 
-export type OMDBResSchema = {
+export type OMDBResSchema = { Search: OMDBResItem[] };
+
+export type OMDBResItem = {
   Actors?: string;
   Awards?: string;
   BoxOffice?: string;
