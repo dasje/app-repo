@@ -45,7 +45,13 @@ const ChooseLoginSignup = ({
             successRedirectUrl ? successRedirectUrl : undefined
           }
         />
-        <Signup isDismissable={false} hasCloseButton={false} />
+        <Signup
+          isDismissable={false}
+          hasCloseButton={false}
+          successRedirectUrl={
+            successRedirectUrl ? successRedirectUrl : undefined
+          }
+        />
       </CardFooter>
     </Card>
   );
