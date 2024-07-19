@@ -9,7 +9,7 @@ export const fetchOMDBDataHandler = async (titleReq: findByNameSchema) => {
     let { mediaName } = findMediaByNameSchema.parse(titleReq);
     mediaName = mediaName.split(" ").join("+");
     const resMedia = await fetch(
-      `https://www.omdbapi.com/?t=${mediaName}&apikey=${process.env.REACT_APP_OMDB_API_KEY}`
+      `https://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_API_KEY}&s=${mediaName}`
     );
     if (!resMedia.ok) {
       console.log("Error caught in fetchOMDBDataHandler");

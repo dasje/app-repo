@@ -177,7 +177,7 @@ const WatchlistListMenuBar = ({
         </Button>
       </div>
       <div className="col-span-1 self-center space-x-2">
-        <Button isIconOnly onPress={handleFriendsOnOpen} size="sm">
+        <Button isIconOnly onClick={handleFriendsOnOpen} size="sm">
           <Image
             src={addUserIcon}
             alt="Add user button"
@@ -188,6 +188,7 @@ const WatchlistListMenuBar = ({
         <Modal
           isOpen={handleFriendsIsOpen}
           onOpenChange={handleFriendsOnOpenChange}
+          disableAnimation
         >
           <ModalContent>
             {(onClose) => (
@@ -235,39 +236,44 @@ const WatchlistListMenuBar = ({
                     </Listbox>
                   )}
                   <div>Add users</div>
-                  {friendsIsLoading && <Loading />}
-                  {friendsError && <div>Error fetching friends.</div>}
-                  {listFriends && listFriends.length > 0 && (
-                    <Listbox selectionMode="none">
-                      {listFriends.map((i, k) => (
-                        <ListboxItem
-                          key={k}
-                          endContent={
-                            <Button
-                              isIconOnly
-                              isLoading={addUser === i.email}
-                              onPress={() => {
-                                console.log("adding user");
-                                setAddUser(i.email);
-                              }}
-                            >
-                              <Image
-                                src={addUserIcon}
-                                width={15}
-                                height={15}
-                                alt="Add user to list"
-                              />
-                            </Button>
-                          }
-                        >
-                          <User
-                            name={i.name}
-                            description={i.email}
-                            avatarProps={{ src: i.image }}
-                          />
-                        </ListboxItem>
-                      ))}
-                    </Listbox>
+                  {friendsIsLoading ? (
+                    <Loading />
+                  ) : friendsError ? (
+                    <div>Error fetching friends.</div>
+                  ) : (
+                    listFriends &&
+                    listFriends.length > 0 && (
+                      <Listbox selectionMode="none">
+                        {listFriends.map((i, k) => (
+                          <ListboxItem
+                            key={k}
+                            endContent={
+                              <Button
+                                isIconOnly
+                                isLoading={addUser === i.email}
+                                onPress={() => {
+                                  console.log("adding user");
+                                  setAddUser(i.email);
+                                }}
+                              >
+                                <Image
+                                  src={addUserIcon}
+                                  width={15}
+                                  height={15}
+                                  alt="Add user to list"
+                                />
+                              </Button>
+                            }
+                          >
+                            <User
+                              name={i.name}
+                              description={i.email}
+                              avatarProps={{ src: i.image }}
+                            />
+                          </ListboxItem>
+                        ))}
+                      </Listbox>
+                    )
                   )}
                 </ModalBody>
                 <ModalFooter>
