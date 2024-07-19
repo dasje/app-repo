@@ -8,7 +8,7 @@ import searchIcon from "@/app/lib/icons/icons8-search-100.png";
 import backIcon from "@/app/lib/icons/icons8-enter-90.png";
 import cancelIcon from "@/app/lib/icons/icons8-cancel-100.png";
 import { WatchlistContentTable } from "@/app/database/types";
-import { fetchOMDBDataHandler } from "@/app/lib/handlers/fetchOMDBDataHandler";
+import { fetchOMDBDataHandler } from "@/app/lib/handlers/watchlist_handlers/fetchOMDBDataHandler";
 import { OMDBResSchema } from "@/app/lib/schemas/watchlist-schemas/omdb-message-schemas";
 import { removeWatchlistItemHandler } from "@/app/lib/handlers/removeWatchlistItemHandler";
 

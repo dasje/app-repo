@@ -15,7 +15,7 @@ import Image from "next/image";
 import deleteIcon from "@/app/lib/icons/icons8-delete-120.png";
 import { WatchlistContentTable } from "@/app/database/types";
 import { removeWatchlistItemHandler } from "@/app/lib/handlers/removeWatchlistItemHandler";
-import { updateWatchlistItemStatusHandler } from "@/app/lib/handlers/updateWatchlistItemStatusHandler";
+import { updateWatchlistItemStatusHandler } from "@/app/lib/handlers/watchlist_handlers/updateWatchlistItemStatusHandler";
 import WatchlistListMenuBar from "./WatchlistListMenuBar";
 import AddWatchlistListItemBar from "./AddWatchlistListItemBar";
 import useSWR, { useSWRConfig } from "swr";

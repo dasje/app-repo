@@ -1,6 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-// import * as z from "zod";
 import BadgerAppsInviteUserEmail from "../templates/BadgerAppsInviteUserEmail";
 
 interface sendEmailInterface {
