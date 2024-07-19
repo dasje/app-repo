@@ -57,7 +57,7 @@ export default function Page() {
         console.log("User apps and all apps", userApps, appsRes);
       }
     };
-    fetchData();
+    user && fetchData();
   }, [user, triggerRefreshUserApps]);
 
   return (
@@ -73,7 +73,7 @@ export default function Page() {
               />
             </div>
           </div>
-          <Divider />
+          {/* <Divider /> */}
           <div className="m-6 rounded bg-white flex flex-grow justify-center">
             {appsRes && (
               <AppDashboard

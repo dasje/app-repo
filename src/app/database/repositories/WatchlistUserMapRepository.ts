@@ -23,8 +23,8 @@ export async function findWatchlistUserMappings(
     query = query.where("id", "=", criteria.id); // Kysely is immutable, you must re-assign!
   }
 
-  if (criteria.user_id) {
-    query = query.where("user_id", "=", criteria.user_id);
+  if (criteria.role) {
+    query = query.where("role", "=", criteria.role);
   }
 
   if (criteria.watchlist_id) {
@@ -32,6 +32,32 @@ export async function findWatchlistUserMappings(
   }
 
   return await query.selectAll().execute();
+}
+
+export async function findWatchlistUser(watchlistId: string, userId: string) {
+  return await db
+    .selectFrom("watchlist_user_map")
+    .where("watchlist_id", "=", watchlistId)
+    .where("user_id", "=", userId)
+    .selectAll()
+    .executeTakeFirst();
+}
+
+export async function findWatchlistUsers(watchlistId: string) {
+  return await db
+    .selectFrom("watchlist_user_map")
+    .where("watchlist_id", "=", watchlistId)
+    .innerJoin("User", "User.id", "watchlist_user_map.user_id")
+    .select([
+      "watchlist_user_map.added_date",
+      "watchlist_user_map.id",
+      "watchlist_user_map.role",
+      "watchlist_user_map.user_id",
+      "User.email",
+      "User.image",
+      "User.name",
+    ])
+    .execute();
 }
 
 export async function updateWatchlistUserMap(

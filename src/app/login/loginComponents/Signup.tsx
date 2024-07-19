@@ -1,6 +1,15 @@
 "use client";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
-import { Button, Divider } from "@nextui-org/react";
+import {
+  Button,
+  Divider,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import { Input } from "@nextui-org/input";
 import { useState } from "react";
 import EyeFilledIcon from "@/app/lib/icons/eye_show_filled_icon_201405.png";
@@ -11,7 +20,17 @@ import { passwordValidation } from "../../lib/auth/passwordValidation";
 import { signIn } from "next-auth/react";
 import { signupHandler } from "@/app/lib/handlers/signupHandler";
 
-const Signup = () => {
+interface SignupInterface {
+  isDismissable: boolean;
+  hasCloseButton: boolean;
+  successRedirectUrl?: string;
+}
+
+const Signup = ({
+  isDismissable,
+  hasCloseButton,
+  successRedirectUrl,
+}: SignupInterface) => {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -39,7 +58,9 @@ const Signup = () => {
       };
       const res = await signupHandler(signupBody);
       res.msg === "success" &&
-        signIn(undefined, { callbackUrl: "/login/login" });
+        signIn(undefined, {
+          callbackUrl: successRedirectUrl ? successRedirectUrl : "/login",
+        });
       if (res.msg === "error") {
         if (res.msg.search("Duplicate entry")) {
           setErrorMessage("User already exists.");
@@ -54,150 +75,165 @@ const Signup = () => {
     }
   };
 
+  const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure();
+
   return (
-    <Card className="md:w-[400px]">
-      <CardHeader className="flex gap-3">
-        {" "}
-        <div className="flex flex-col">
-          <p className="text-lg font-bold">Sign up</p>
-        </div>
-      </CardHeader>
-      <Divider />
-      <CardBody className="gap-4">
-        {" "}
-        <Input
-          isRequired
-          type="name"
-          label="Name"
-          color="secondary"
-          isClearable
-          value={signupNameValue}
-          isInvalid={!signupNameValid}
-          onChange={(e) => {
-            setSignupNameValue(e.target.value);
-            signupNameValue.length < 2
-              ? setSignupNameValid(false)
-              : setSignupNameValid(true);
-            setErrorMessage(null);
-          }}
-          onClear={() => setSignupNameValue("")}
-        />
-        <Input
-          isRequired
-          type="email"
-          label="Email"
-          color="secondary"
-          isClearable
-          value={signupEmailValue}
-          isInvalid={!signupEmailValid}
-          errorMessage="This is not a valid email."
-          onChange={(e) => {
-            setSignupEmailValue(e.target.value);
-            setSignupEmailValid(emailValidation(e.target.value));
-            setErrorMessage(null);
-          }}
-          onClear={() => setSignupEmailValue("")}
-        />
-        <Input
-          label="Password"
-          variant="bordered"
-          placeholder="Enter your password"
-          color="secondary"
-          isInvalid={!signupPasswordValid}
-          errorMessage="Password must contain one digit from 1 to 9, one lowercase letter, one uppercase letter, one special character, no space, and it must be 8-16 characters long."
-          value={signupPasswordValue}
-          onChange={(e) => {
-            setSignupPasswordValue(e.target.value);
-            setSignupPasswordValid(passwordValidation(e.target.value));
-            setErrorMessage(null);
-          }}
-          endContent={
-            <button
-              className="focus:outline-none"
-              type="button"
-              onClick={toggleVisibility}
+    <>
+      <Button color="primary" onPress={onOpen} variant="flat">
+        Sign up
+      </Button>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+        isDismissable={isDismissable}
+        closeButton={hasCloseButton}
+        isKeyboardDismissDisabled={true}
+        backdrop="blur"
+      >
+        <ModalContent>
+          <ModalHeader>
+            <div className="flex flex-col">
+              <p className="text-lg font-bold">Sign up</p>
+            </div>
+          </ModalHeader>
+          <ModalBody className="gap-4">
+            <Divider />
+            <Input
+              isRequired
+              type="name"
+              label="Name"
+              color="secondary"
+              isClearable
+              value={signupNameValue}
+              isInvalid={!signupNameValid}
+              onChange={(e) => {
+                setSignupNameValue(e.target.value);
+                signupNameValue.length < 2
+                  ? setSignupNameValid(false)
+                  : setSignupNameValid(true);
+                setErrorMessage(null);
+              }}
+              onClear={() => setSignupNameValue("")}
+            />
+            <Input
+              isRequired
+              type="email"
+              label="Email"
+              color="secondary"
+              isClearable
+              value={signupEmailValue}
+              isInvalid={!signupEmailValid}
+              errorMessage="This is not a valid email."
+              onChange={(e) => {
+                setSignupEmailValue(e.target.value);
+                setSignupEmailValid(emailValidation(e.target.value));
+                setErrorMessage(null);
+              }}
+              onClear={() => setSignupEmailValue("")}
+            />
+            <Input
+              label="Password"
+              variant="bordered"
+              placeholder="Enter your password"
+              color="secondary"
+              isInvalid={!signupPasswordValid}
+              errorMessage="Password must contain one digit from 1 to 9, one lowercase letter, one uppercase letter, one special character, no space, and it must be 8-16 characters long."
+              value={signupPasswordValue}
+              onChange={(e) => {
+                setSignupPasswordValue(e.target.value);
+                setSignupPasswordValid(passwordValidation(e.target.value));
+                setErrorMessage(null);
+              }}
+              endContent={
+                <button
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibility}
+                >
+                  {isVisible ? (
+                    <Image
+                      src={EyeFilledIcon}
+                      alt="eye filled"
+                      width={10}
+                      height={10}
+                    />
+                  ) : (
+                    <Image
+                      src={EyeSlashFilledIcon}
+                      alt="eye filled"
+                      width={10}
+                      height={10}
+                    />
+                  )}
+                </button>
+              }
+              type={isVisible ? "text" : "password"}
+              className="max-w-xs"
+            />
+            <Input
+              label="Re-enter password"
+              variant="bordered"
+              placeholder="Re-enter your password"
+              color={
+                signupRepeatPasswordValue === signupPasswordValue
+                  ? "secondary"
+                  : "danger"
+              }
+              value={signupRepeatPasswordValue}
+              onChange={(e) => {
+                setSignupRepeatPasswordValue(e.target.value);
+                setErrorMessage(null);
+              }}
+              endContent={
+                <button
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibility}
+                >
+                  {isVisible ? (
+                    <Image
+                      src={EyeFilledIcon}
+                      alt="eye filled"
+                      width={10}
+                      height={10}
+                    />
+                  ) : (
+                    <Image
+                      src={EyeSlashFilledIcon}
+                      alt="eye filled"
+                      width={10}
+                      height={10}
+                    />
+                  )}
+                </button>
+              }
+              type={isVisible ? "text" : "password"}
+              className="max-w-xs"
+            />
+            {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+          </ModalBody>
+          <Divider />
+          <ModalFooter className="gap-4">
+            <Button
+              radius="full"
+              color="secondary"
+              isLoading={signupProcessing}
+              isDisabled={
+                !signupNameValid ||
+                !signupEmailValid ||
+                !signupPasswordValid ||
+                signupPasswordValue !== signupRepeatPasswordValue
+              }
+              variant="ghost"
+              onPress={handleSignupRequest}
             >
-              {isVisible ? (
-                <Image
-                  src={EyeFilledIcon}
-                  alt="eye filled"
-                  width={10}
-                  height={10}
-                />
-              ) : (
-                <Image
-                  src={EyeSlashFilledIcon}
-                  alt="eye filled"
-                  width={10}
-                  height={10}
-                />
-              )}
-            </button>
-          }
-          type={isVisible ? "text" : "password"}
-          className="max-w-xs"
-        />
-        <Input
-          label="Re-enter password"
-          variant="bordered"
-          placeholder="Re-enter your password"
-          color={
-            signupRepeatPasswordValue === signupPasswordValue
-              ? "secondary"
-              : "danger"
-          }
-          value={signupRepeatPasswordValue}
-          onChange={(e) => {
-            setSignupRepeatPasswordValue(e.target.value);
-            setErrorMessage(null);
-          }}
-          endContent={
-            <button
-              className="focus:outline-none"
-              type="button"
-              onClick={toggleVisibility}
-            >
-              {isVisible ? (
-                <Image
-                  src={EyeFilledIcon}
-                  alt="eye filled"
-                  width={10}
-                  height={10}
-                />
-              ) : (
-                <Image
-                  src={EyeSlashFilledIcon}
-                  alt="eye filled"
-                  width={10}
-                  height={10}
-                />
-              )}
-            </button>
-          }
-          type={isVisible ? "text" : "password"}
-          className="max-w-xs"
-        />
-        {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-      </CardBody>
-      <Divider />
-      <CardFooter className="gap-4">
-        <Button
-          radius="full"
-          color="secondary"
-          isLoading={signupProcessing}
-          isDisabled={
-            !signupNameValid ||
-            !signupEmailValid ||
-            !signupPasswordValid ||
-            signupPasswordValue !== signupRepeatPasswordValue
-          }
-          variant="ghost"
-          onPress={handleSignupRequest}
-        >
-          Sign up
-        </Button>
-      </CardFooter>
-    </Card>
+              Sign up
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

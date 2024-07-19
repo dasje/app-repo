@@ -17,7 +17,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   adapter: KyselyAdapter(db),
   pages: {
-    signIn: "/login/login",
+    signIn: "/login",
   },
   providers: [
     CredentialsProvider({
@@ -62,7 +62,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       );
 
       if (isProtected && !isLoggedIn) {
-        const redirectUrl = new URL("/login", nextUrl.origin);
+        const redirectUrl = new URL("/", nextUrl.origin);
         redirectUrl.searchParams.append("callbackUrl", nextUrl.href);
         return Response.redirect(redirectUrl);
       }
