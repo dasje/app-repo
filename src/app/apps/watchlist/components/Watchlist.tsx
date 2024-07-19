@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
-import { UserType } from "@/app/lib/handlers/getUser";
+import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import { useEffect, useState } from "react";
 import {
   Checkbox,
@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import deleteIcon from "@/app/lib/icons/icons8-delete-120.png";
 import { WatchlistContentTable } from "@/app/database/types";
-import { removeWatchlistItemHandler } from "@/app/lib/handlers/removeWatchlistItemHandler";
+import { removeWatchlistItemHandler } from "@/app/lib/handlers/watchlist_handlers/removeWatchlistItemHandler";
 import { updateWatchlistItemStatusHandler } from "@/app/lib/handlers/watchlist_handlers/updateWatchlistItemStatusHandler";
 import WatchlistListMenuBar from "./WatchlistListMenuBar";
 import AddWatchlistListItemBar from "./AddWatchlistListItemBar";

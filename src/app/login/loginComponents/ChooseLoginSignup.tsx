@@ -1,7 +1,6 @@
 "use client";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
-import { Button, Divider } from "@nextui-org/react";
-import Link from "next/link";
+import { Divider } from "@nextui-org/react";
 import Login from "./Login";
 import Signup from "./Signup";
 

@@ -11,7 +11,7 @@ import Link from "next/link";
 import Logo from "@/app/lib/images/badger-logo.jpg";
 import Image from "next/image";
 import { useState } from "react";
-import { UserType } from "@/app/lib/handlers/getUser";
+import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import { Session } from "next-auth";
 import Login from "@/app/login/loginComponents/Login";
 import Signup from "@/app/login/loginComponents/Signup";

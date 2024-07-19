@@ -1,16 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { UserType } from "@/app/lib/handlers/getUser";
+import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Input, Button, Card, User, Link } from "@nextui-org/react";
 import Image from "next/image";
 import searchIcon from "@/app/lib/icons/icons8-search-100.png";
 import backIcon from "@/app/lib/icons/icons8-enter-90.png";
 import cancelIcon from "@/app/lib/icons/icons8-cancel-100.png";
-import { WatchlistContentTable } from "@/app/database/types";
 import { fetchOMDBDataHandler } from "@/app/lib/handlers/watchlist_handlers/fetchOMDBDataHandler";
 import { OMDBResSchema } from "@/app/lib/schemas/watchlist-schemas/omdb-message-schemas";
-import { removeWatchlistItemHandler } from "@/app/lib/handlers/removeWatchlistItemHandler";
+import { removeWatchlistItemHandler } from "@/app/lib/handlers/watchlist_handlers/removeWatchlistItemHandler";
 
 interface AddWatchlistListItemBarInterface {
   user: UserType;

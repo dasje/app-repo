@@ -3,10 +3,8 @@
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "@/app/lib/handlers/swrFetcher";
 import { useEffect, useState } from "react";
-import { UserType } from "@/app/lib/handlers/getUser";
-import { UserConnectionsTable, UserTable } from "@/app/database/types";
+import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import { AppBoxWrapper } from "../layoutComponents/AppBoxWrapper";
-import GhostDashboardCard from "../GhostDashboardCard";
 import { Card, CardBody, CardFooter, User } from "@nextui-org/react";
 import Image from "next/image";
 import AddFriendPopover from "./AddFriendPopover";

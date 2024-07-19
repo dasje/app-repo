@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Divider, Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import Badger from "@/app/lib/images/badger-logo.jpg";
 import HilariousIcon from "@/app/lib/icons/icons8-rolling-eyes-for-anything-strange-happening-emoji-96.png";

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use server";
-import { getUser } from "@/app/lib/handlers/getUser";
+import { getUser } from "@/app/lib/handlers/auth_handlers/getUser";
 import AvailableWatchlists from "./components/AvailableWatchlists";
 import AddWatchlist from "./components/AddWatchlist";
 import ChooseLoginSignup from "@/app/login/loginComponents/ChooseLoginSignup";

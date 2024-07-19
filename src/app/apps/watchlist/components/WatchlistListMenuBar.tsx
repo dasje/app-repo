@@ -19,8 +19,7 @@ import backIcon from "@/app/lib/icons/icons8-enter-90.png";
 import addUserIcon from "@/app/lib/icons/icons8-add-user-100.png";
 import useSWR from "swr";
 import { fetcher } from "@/app/lib/handlers/swrFetcher";
-import { WatchlistUserMapTable } from "@/app/database/types";
-import { UserType } from "@/app/lib/handlers/getUser";
+import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import Loading from "../../loading";
 
 interface WatchlistListMenuBarInterface {

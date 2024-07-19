@@ -1,7 +1,7 @@
 import { Divider, Spinner } from "@nextui-org/react";
 import AppDashboardCard from "../AppDashboardCard";
 import { AppTable } from "@/app/database/types";
-import { UserType } from "@/app/lib/handlers/getUser";
+import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import { Dispatch, SetStateAction, Suspense } from "react";
 import { AppBoxWrapper } from "./AppBoxWrapper";
 

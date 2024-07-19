@@ -3,10 +3,9 @@
 
 import AppDashboard from "../components/layoutComponents/AppDashboard";
 import { getUser, UserType } from "../lib/handlers/auth_handlers/getUser";
-import { AppAccess, AppTable } from "../database/types";
+import { AppTable } from "../database/types";
 import UserAppDashboard from "../components/layoutComponents/UserAppDashboard";
 import { useEffect, useState } from "react";
-import { ResDataType } from "../lib/schemas/res-types";
 import ChooseLoginSignup from "../login/loginComponents/ChooseLoginSignup";
 import useSWR from "swr";
 import { fetcher } from "../lib/handlers/swrFetcher";
