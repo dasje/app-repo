@@ -157,7 +157,7 @@ const Watchlist = ({
                             <div className="w-full flex justify-between gap-2">
                               <User
                                 avatarProps={{ size: "md", src: item.poster }}
-                                description={`${item.year} - ${item.runtime}`}
+                                description={`${item.year}`}
                                 name={item.media_name}
                               />
                             </div>

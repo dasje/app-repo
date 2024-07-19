@@ -2,7 +2,15 @@
 "use client";
 import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Input, Button, Card, User, Link } from "@nextui-org/react";
+import {
+  Input,
+  Button,
+  Card,
+  User,
+  Link,
+  Listbox,
+  ListboxItem,
+} from "@nextui-org/react";
 import Image from "next/image";
 import searchIcon from "@/app/lib/icons/icons8-search-100.png";
 import backIcon from "@/app/lib/icons/icons8-enter-90.png";
@@ -47,16 +55,16 @@ const AddWatchlistListItemBar = ({
           userEmail: user.email,
           mediaName: submitNewListItem.Title,
           year: submitNewListItem.Year,
-          rated: submitNewListItem.Rated,
-          released: submitNewListItem.Released,
-          runtime: submitNewListItem.Runtime,
-          genre: submitNewListItem.Genre,
-          director: submitNewListItem.Director,
-          writer: submitNewListItem.Writer,
-          plot: submitNewListItem.Plot,
-          language: submitNewListItem.Language,
-          country: submitNewListItem.Country,
-          awards: submitNewListItem.Awards,
+          //   rated: submitNewListItem.Rated,
+          //   released: submitNewListItem.Released,
+          //   runtime: submitNewListItem.Runtime,
+          //   genre: submitNewListItem.Genre,
+          //   director: submitNewListItem.Director,
+          //   writer: submitNewListItem.Writer,
+          //   plot: submitNewListItem.Plot,
+          //   language: submitNewListItem.Language,
+          //   country: submitNewListItem.Country,
+          //   awards: submitNewListItem.Awards,
           poster: submitNewListItem.Poster,
           imdbId: submitNewListItem.imdbID,
         };
@@ -74,9 +82,9 @@ const AddWatchlistListItemBar = ({
             console.log("Error caught");
           } else {
             setFetchListValues(!fetchListValues);
-            setSearchValue("");
-            setOmdbRes(undefined);
-            setSearchForTitle(!searchForTitle);
+            // setSearchValue("");
+            // setOmdbRes(undefined);
+            // setSearchForTitle(!searchForTitle);
             setSubmitNewListItem(undefined);
           }
         });
@@ -162,14 +170,20 @@ const AddWatchlistListItemBar = ({
           />
         </Button>
       </div>
-      {omdbRes &&
-        searchForTitle &&
-        omdbRes.map((i, k) => (
-          <div
-            key={k}
-            className="flex flex-grow pl-2 pr-2 m-0 bg-yellow-100 bg-opacity-50"
-          >
-            <Link onPress={() => setSubmitNewListItem(i)}>
+      {omdbRes && searchForTitle && (
+        <Listbox
+          className="max-h-[200px] overflow-y-scroll scrolling-touch"
+          onAction={(key) => {
+            console.log(omdbRes[key]);
+            setSubmitNewListItem(omdbRes[key]);
+          }}
+        >
+          {omdbRes.map((i, k) => (
+            <ListboxItem
+              key={k}
+              className="flex flex-grow pl-2 pr-2 m-0 bg-yellow-100 bg-opacity-50"
+            >
+              {/* <Link onPress={() => setSubmitNewListItem(i)}> */}
               <User
                 name={i.Title}
                 description={i.Year}
@@ -177,9 +191,11 @@ const AddWatchlistListItemBar = ({
                   src: `${i.Poster}`,
                 }}
               />
-            </Link>
-          </div>
-        ))}
+              {/* </Link> */}
+            </ListboxItem>
+          ))}
+        </Listbox>
+      )}
     </Card>
   );
 };
