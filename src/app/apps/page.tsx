@@ -10,6 +10,7 @@ import { userAppsHandler } from "../lib/handlers/fetchUserApps";
 import UserAppDashboard from "../components/layoutComponents/UserAppDashboard";
 import { useEffect, useState } from "react";
 import { ResDataType } from "../lib/schemas/res-types";
+import ChooseLoginSignup from "../login/loginComponents/ChooseLoginSignup";
 
 export default function Page() {
   const [user, setUser] = useState<UserType>();
@@ -88,7 +89,7 @@ export default function Page() {
       {!user && (
         <div className="m-6 rounded bg-white flex flex-grow justify-center">
           <div className="font-bold text-3xl text-center grid-cols-4">
-            Please login or sign up.
+            <ChooseLoginSignup textToDisplay="Please log in or sign up to access applications." />
             <div className="col-span-4 self-center"></div>
           </div>
         </div>
