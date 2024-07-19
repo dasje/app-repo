@@ -19,7 +19,7 @@ export default async function Page() {
       ) : (
         <div>
           <AddWatchlist user={user} />
-          <AvailableWatchlists currentUser={user} />
+          {user && <AvailableWatchlists currentUser={user} />}
         </div>
       )}
     </>

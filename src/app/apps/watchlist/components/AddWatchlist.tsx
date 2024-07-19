@@ -1,6 +1,6 @@
 "use client";
 
-import { ListboxWrapper } from "@/app/components/ListboxWrapper";
+// import { ListboxWrapper } from "@/app/components/ListboxWrapper";
 import Image from "next/image";
 import addIcon from "@/app/lib/icons/icons8-add-100.png";
 import addIconOutline from "@/app/lib/icons/icons8-add-100-outline.png";
@@ -8,8 +8,8 @@ import { useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/react";
 import { UserType } from "@/app/lib/handlers/getUser";
-import { error } from "console";
 import { useRouter } from "next/navigation";
+import { ListboxWrapper } from "@/app/components/layoutComponents/ListboxWrapper";
 
 interface AddWatchlistInterface {
   user: UserType;

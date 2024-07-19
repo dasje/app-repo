@@ -11,6 +11,7 @@ import { Database } from "@auth/kysely-adapter";
 
 export interface DB extends Database {
   User: UserTable;
+  user_connections: UserConnectionsTable;
   //   Account: AccountTable;
   //   Session: SessionTable;
   //   VerificationToken: VerificationTokenTable;
@@ -20,6 +21,20 @@ export interface DB extends Database {
   watchlist_content: WatchlistContentTable;
   watchlist_user_map: WatchlistUserMapTable;
 }
+
+export interface UserConnectionsTable {
+  id: string;
+  user_id: string;
+  friend_id: string | null;
+  friend_email: string;
+  invite_code: string | null;
+  invite_date: ColumnType<Date, string | undefined>;
+  connection_date: ColumnType<Date, string | undefined>;
+  connected: number;
+}
+export type UserConnection = Selectable<UserConnectionsTable>;
+export type NewUserConnection = Insertable<UserConnectionsTable>;
+export type UpdateUserConnection = Updateable<UserConnectionsTable>;
 
 export interface UserTable {
   id: string;
@@ -134,6 +149,8 @@ export interface WatchlistUserMapTable {
   id: string;
   watchlist_id: string;
   user_id: string;
+  role: "owner" | "friend";
+  added_date: Date;
 }
 export type WatchlistUserMap = Selectable<WatchlistUserMapTable>;
 export type NewWatchlistUserMap = Insertable<WatchlistUserMapTable>;

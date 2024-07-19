@@ -33,7 +33,7 @@ const UserAppDashboardCard = ({
   currentUser,
 }: UserAppDashboardCardInterface) => {
   return (
-    <div className="p-4">
+    <div className="p-4 w-[200px] w-[200px]">
       <Card isFooterBlurred radius="lg" className="border-none">
         <Image
           alt={imageAlt}

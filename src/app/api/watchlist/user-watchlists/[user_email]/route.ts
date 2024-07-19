@@ -1,12 +1,14 @@
 import { findUser } from "@/app/database/repositories/UserRepository";
-import { getUserWatchlists } from "@/app/lib/schemas/watchlist-schemas/watchlist-schema";
 import { fetchAllUserLists } from "@/app/database/repositories/WatchlistUserMapRepository";
 
-export async function POST(req: Request) {
+type Params = {
+  user_email: string;
+};
+
+export async function GET(request: Request, context: { params: Params }) {
+  const userEmail = context.params.user_email;
   var userWatchlistItems;
   try {
-    const { userEmail } = getUserWatchlists.parse(await req.json());
-
     const userId = (await findUser({ email: userEmail })).id;
     userWatchlistItems = await fetchAllUserLists(userId);
   } catch (error: any) {

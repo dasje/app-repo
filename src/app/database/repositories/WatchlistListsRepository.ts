@@ -4,7 +4,6 @@ import {
   UpdateWatchlistLists,
   WatchlistLists,
 } from "@/app/database/types";
-import { findUser } from "./UserRepository";
 import { createWatchlistUserMap } from "./WatchlistUserMapRepository";
 
 export async function findWatchlistListById(id: string) {
@@ -62,6 +61,7 @@ export async function createWatchlistList(watchlistList: NewWatchlistLists) {
   await createWatchlistUserMap({
     watchlist_id: addedList[0].id,
     user_id: watchlistList.created_by,
+    role: "owner",
   });
   return addedList[0];
 }
