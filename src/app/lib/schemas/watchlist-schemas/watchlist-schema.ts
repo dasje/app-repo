@@ -26,58 +26,19 @@ export const addWatchlistItemSchema = object({
     1,
     "User email is required"
   ),
-  year: string({ required_error: "Year is required" }).min(
-    1,
-    "Yeare is required"
-  ),
-  rated: string({ required_error: "Rating is required" }).min(
-    1,
-    "Rating is required"
-  ),
-  released: string({ required_error: "Release date is required" }).min(
-    1,
-    "Release date is required"
-  ),
-  runtime: string({ required_error: "Runtime is required" }).min(
-    1,
-    "Runtime is required"
-  ),
-  genre: string({ required_error: "Genre is required" }).min(
-    1,
-    "Genre is required"
-  ),
-  director: string({ required_error: "Director data is required" }).min(
-    1,
-    "Director data is required"
-  ),
-  writer: string({ required_error: "Writer data is required" }).min(
-    1,
-    "Writer data is required"
-  ),
-  plot: string({ required_error: "Plot description is required" }).min(
-    1,
-    "Plot description is required"
-  ),
-  language: string({ required_error: "Language is required" }).min(
-    1,
-    "Language is required"
-  ),
-  country: string({ required_error: "Country is required" }).min(
-    1,
-    "Country is required"
-  ),
-  awards: string({ required_error: "Awards data is required" }).min(
-    1,
-    "Awards data is required"
-  ),
-  poster: string({ required_error: "Poster URL is required" }).min(
-    1,
-    "Poster URL is required"
-  ),
-  imdbId: string({ required_error: "IMDB ID is required" }).min(
-    1,
-    "IMDB ID is required"
-  ),
+  year: string().optional(),
+  rated: string().optional(),
+  released: string().optional(),
+  runtime: string().optional(),
+  genre: string().optional(),
+  director: string().optional(),
+  writer: string().optional(),
+  plot: string().optional(),
+  language: string().optional(),
+  country: string().optional(),
+  awards: string().optional(),
+  poster: string().optional(),
+  imdbId: string().optional(),
 });
 
 export type WatchlistInput = TypeOf<typeof addWatchlistItemSchema>;
