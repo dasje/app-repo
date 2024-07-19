@@ -50,11 +50,13 @@ const Header = ({ session }: HeaderInterface) => {
               Home
             </Link>
           </NavbarItem>
-          <NavbarItem>
-            <Link color="foreground" href="/apps/watchlist">
-              Watchlist
-            </Link>
-          </NavbarItem>
+          {!user && (
+            <NavbarItem>
+              <Link color="foreground" href="/apps/watchlist">
+                Watchlist
+              </Link>
+            </NavbarItem>
+          )}
         </NavbarContent>
         <NavbarContent justify="end">
           {!user && (
