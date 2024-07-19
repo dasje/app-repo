@@ -1,13 +1,16 @@
-import { NextResponse } from "next/server";
-import { userEmailSchema } from "@/app/lib/schemas/available-apps-schema";
 import { findAppAccess } from "@/app/database/repositories/AppAccessRepository";
 import { findUser } from "@/app/database/repositories/UserRepository";
 
-export async function POST(req: Request) {
+type Params = {
+  user_email: string;
+};
+
+export async function GET(request: Request, context: { params: Params }) {
+  const userEmail = context.params.user_email;
+
   var userApps;
 
   try {
-    const { userEmail } = userEmailSchema.parse(await req.json());
     const user_id = (await findUser({ email: userEmail })).id;
     userApps = await findAppAccess({ user_id: user_id });
   } catch (error: any) {
@@ -30,7 +33,6 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-  console.log("Success in user-applications route", userApps);
 
-  return Response.json({ apps: userApps }, { status: 200 });
+  return Response.json(userApps);
 }

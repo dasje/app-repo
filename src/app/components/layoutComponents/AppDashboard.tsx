@@ -1,7 +1,7 @@
 import { Divider, Spinner } from "@nextui-org/react";
 import AppDashboardCard from "../AppDashboardCard";
 import { AppTable } from "@/app/database/types";
-import { UserType } from "@/app/lib/handlers/getUser";
+import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import { Dispatch, SetStateAction, Suspense } from "react";
 import { AppBoxWrapper } from "./AppBoxWrapper";
 
@@ -18,7 +18,7 @@ const AppDashboard = ({
   return (
     <>
       <div className="font-bold text-3xl text-center">
-        {Array.isArray(appsRes) && appsRes.length > 0 ? (
+        {appsRes && appsRes.length > 0 ? (
           <>
             <div className="self-center tracking-wide font-bold text-lg p-4">
               Add an app
@@ -29,8 +29,6 @@ const AppDashboard = ({
               <AppBoxWrapper>
                 <div className="grid grid-cols-1 md:grid-cols-6">
                   {appsRes &&
-                    Array.isArray(appsRes) &&
-                    appsRes.length > 0 &&
                     appsRes.map((i: AppTable, k) => (
                       <Suspense
                         key={k}
@@ -64,6 +62,8 @@ const AppDashboard = ({
               </AppBoxWrapper>
             </div>
           </>
+        ) : appsRes.length === 0 ? (
+          <></>
         ) : (
           <div className="font-bold text-3xl text-center grid-cols-4">
             <div className="self-center tracking-wide font-bold text-lg p-4">

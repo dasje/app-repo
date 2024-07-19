@@ -2,82 +2,113 @@
 "use client";
 
 import AppDashboard from "../components/layoutComponents/AppDashboard";
-import { getUser, UserType } from "../lib/handlers/getUser";
-import { Divider } from "@nextui-org/react";
-import { AppAccess, AppTable } from "../database/types";
-import { allAppsHandler } from "../lib/handlers/fetchAllApps";
-import { userAppsHandler } from "../lib/handlers/fetchUserApps";
+import { getUser, UserType } from "../lib/handlers/auth_handlers/getUser";
+import { AppTable } from "../database/types";
 import UserAppDashboard from "../components/layoutComponents/UserAppDashboard";
 import { useEffect, useState } from "react";
-import { ResDataType } from "../lib/schemas/res-types";
+import ChooseLoginSignup from "../login/loginComponents/ChooseLoginSignup";
+import useSWR from "swr";
+import { fetcher } from "../lib/handlers/swrFetcher";
+import Loading from "./loading";
 
 export default function Page() {
   const [user, setUser] = useState<UserType>();
+  const [fetchingUser, setFetchingUser] = useState<boolean>(true);
 
   useEffect(() => {
     const findUser = async () => {
       const currentUser = await getUser();
       setUser(currentUser);
+      setFetchingUser(false);
     };
     findUser();
   }, []);
 
   const [userApps, setUserApps] = useState<AppTable[]>([]);
-  const [appsRes, setApps] = useState<ResDataType<string, AppTable[]>>();
+  const [appsRes, setApps] = useState<AppTable[]>();
   const [triggerRefreshUserApps, setTriggerRefreshUserApps] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let apps: ResDataType<string, AppTable[]>;
-      let userApplications: ResDataType<string, AppAccess[]>;
-      try {
-        apps = await allAppsHandler({
-          userEmail: user?.email,
-        });
+  const {
+    data: userAppsData,
+    error: userAppsError,
+    isLoading: userAppsIsLoading,
+  } = useSWR(
+    () =>
+      triggerRefreshUserApps || true
+        ? `${process.env.NEXT_PUBLIC_URL}/api/user-applications/` + user.email
+        : null,
+    fetcher,
+    {
+      // refreshInterval: 500,
+    }
+  );
 
-        userApplications = await userAppsHandler({
-          userEmail: user?.email,
-        });
-      } finally {
-        setApps(apps);
-        let userApps = [];
-        Array.isArray(userApplications.data.apps) &&
-          userApplications.data.apps.forEach((item) => {
-            apps.data.apps.forEach((appItem) => {
-              if (item.app_id === appItem.id) {
-                userApps.push(appItem);
-                apps.data.apps.filter((i) => {
-                  i.id !== appItem.id;
-                });
-              }
-            });
+  const {
+    data: allAppsData,
+    error: allAppsError,
+    isLoading: allAppsIsLoading,
+  } = useSWR(
+    triggerRefreshUserApps || true
+      ? `${process.env.NEXT_PUBLIC_URL}/api/applications`
+      : null,
+    fetcher,
+    {
+      // refreshInterval: 500,
+    }
+  );
+
+  useEffect(() => {
+    console.log("HEHE", allAppsData);
+    allAppsData && setApps(allAppsData);
+  }, [allAppsData]);
+
+  useEffect(() => {
+    allAppsError && console.log(allAppsError);
+  }, [allAppsError]);
+
+  useEffect(() => {
+    if (allAppsData && userAppsData) {
+      let userApps = [];
+      Array.isArray(userAppsData) &&
+        userAppsData.forEach((item) => {
+          allAppsData.forEach((appItem) => {
+            if (item.app_id === appItem.id) {
+              userApps.push(appItem);
+              appsRes &&
+                setApps(
+                  appsRes.filter((i) => {
+                    i.id !== appItem.id;
+                  })
+                );
+            }
           });
-        setUserApps(userApps);
-        console.log("User apps and all apps", userApps, appsRes);
-      }
-    };
-    user && fetchData();
-  }, [user, triggerRefreshUserApps]);
+        });
+      setUserApps(userApps);
+    }
+  }, [userAppsData]);
 
   return (
     <>
-      {user && (
+      {fetchingUser && <Loading />}
+      {!fetchingUser && user && (
         <>
           <div className="m-6 rounded bg-white flex flex-grow justify-center">
             <div className="font-bold text-3xl text-center grid-cols-4">
               <div className="col-span-4 self-center">Welcome {user.name}!</div>
-              <UserAppDashboard
-                appsRes={Array.isArray(userApps) && userApps}
-                user={user}
-              />
+              {userAppsIsLoading && <Loading />}
+              {userAppsData && (
+                <UserAppDashboard appsRes={userApps && userApps} user={user} />
+              )}
             </div>
           </div>
           {/* <Divider /> */}
           <div className="m-6 rounded bg-white flex flex-grow justify-center">
+            {allAppsIsLoading && <Loading />}
+            {allAppsError && <div>Error fetching applications</div>}
             {appsRes && (
               <AppDashboard
-                appsRes={Array.isArray(appsRes.data.apps) && appsRes.data.apps}
+                appsRes={appsRes}
                 user={user}
                 triggerUserAppRefresh={setTriggerRefreshUserApps}
               />
@@ -85,10 +116,10 @@ export default function Page() {
           </div>
         </>
       )}
-      {!user && (
+      {!fetchingUser && !user && (
         <div className="m-6 rounded bg-white flex flex-grow justify-center">
           <div className="font-bold text-3xl text-center grid-cols-4">
-            Please login or sign up.
+            <ChooseLoginSignup textToDisplay="Please log in or sign up to access applications." />
             <div className="col-span-4 self-center"></div>
           </div>
         </div>

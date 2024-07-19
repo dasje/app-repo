@@ -6,11 +6,6 @@ import {
   CardFooter,
   CardHeader,
   Divider,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
 import { useState } from "react";

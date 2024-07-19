@@ -1,6 +1,6 @@
 import { Divider, Spinner } from "@nextui-org/react";
 import { AppTable } from "@/app/database/types";
-import { UserType } from "@/app/lib/handlers/getUser";
+import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import UserAppDashboardCard from "../UserAppDashboardCard";
 import { Suspense } from "react";
 import FriendsList from "../friendsComponents/FriendsList";

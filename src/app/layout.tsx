@@ -4,7 +4,7 @@ import "@/app/globals.css";
 
 import { Providers } from "./providers";
 import Header from "./components/layoutComponents/Header";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 
 export default async function RootLayout({
   children,

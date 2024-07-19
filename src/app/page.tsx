@@ -1,5 +1,6 @@
 "use server";
 import { auth } from "@/auth";
+import { Features } from "./components/Features";
 
 export default async function Page() {
   const session = await auth();
@@ -9,7 +10,7 @@ export default async function Page() {
     <div>
       {!user && (
         <div className="m-6 rounded bg-white flex flex-grow justify-center">
-          Landing page content. Sign up to access apps.
+          <Features />
         </div>
       )}
       {user && (

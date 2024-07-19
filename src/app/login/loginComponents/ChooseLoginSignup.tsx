@@ -1,7 +1,6 @@
 "use client";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
-import { Button, Divider } from "@nextui-org/react";
-import Link from "next/link";
+import { Divider } from "@nextui-org/react";
 import Login from "./Login";
 import Signup from "./Signup";
 
@@ -31,8 +30,8 @@ const ChooseLoginSignup = ({
         </div>
       </CardHeader>
       <Divider />
-      <CardBody className="gap-4">
-        <p>
+      <CardBody className="gap-4 ">
+        <p className="text-sm font-medium">
           {textToDisplay ? textToDisplay : "Log in or sign up to view apps."}
         </p>
       </CardBody>

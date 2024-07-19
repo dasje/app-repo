@@ -2,7 +2,7 @@
 import {
   findByNameSchema,
   findMediaByNameSchema,
-} from "../schemas/watchlist-schemas/omdb-message-schemas";
+} from "../../schemas/watchlist-schemas/omdb-message-schemas";
 
 export const fetchOMDBDataHandler = async (titleReq: findByNameSchema) => {
   try {
