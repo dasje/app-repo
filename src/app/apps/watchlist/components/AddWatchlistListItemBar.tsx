@@ -32,7 +32,7 @@ const AddWatchlistListItemBar = ({
   setShowSearchBox,
 }: AddWatchlistListItemBarInterface) => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [omdbRes, setOmdbRes] = useState<OMDBResSchema | null>();
+  const [omdbRes, setOmdbRes] = useState<OMDBResItem[] | null>();
   const [submitNewListItem, setSubmitNewListItem] = useState<
     OMDBResItem | undefined
   >();
@@ -41,7 +41,7 @@ const AddWatchlistListItemBar = ({
   useEffect(() => {
     const submitListAddition = async () => {
       let item;
-      if (omdbRes.Search) {
+      if (omdbRes) {
         item = {
           watchlistId: watchlistId,
           userEmail: user.email,
@@ -94,7 +94,7 @@ const AddWatchlistListItemBar = ({
         if (res.msg === "error") {
         } else if (res.msg === "success") {
           console.log("Fetched title ", res);
-          setOmdbRes(res.data);
+          setOmdbRes(res.data.Search);
         }
       };
       fetchTitle();
@@ -164,7 +164,7 @@ const AddWatchlistListItemBar = ({
       </div>
       {omdbRes &&
         searchForTitle &&
-        omdbRes.Search.map((i, k) => (
+        omdbRes.map((i, k) => (
           <div
             key={k}
             className="flex flex-grow pl-2 pr-2 pb-2 m-4 bg-yellow-100 bg-opacity-50"
