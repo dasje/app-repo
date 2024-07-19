@@ -10,9 +10,3 @@ export const queryAvailableAppsSchema = object({
 });
 
 export type AvailableAppsType = TypeOf<typeof queryAvailableAppsSchema>;
-
-export const userEmailSchema = object({
-  userEmail: string(),
-});
-
-export type UserEmailType = TypeOf<typeof userEmailSchema>;
