@@ -177,7 +177,7 @@ const WatchlistListMenuBar = ({
         </Button>
       </div>
       <div className="col-span-1 self-center space-x-2">
-        <Button isIconOnly onPress={handleFriendsOnOpen} size="sm">
+        <Button isIconOnly onClick={handleFriendsOnOpen} size="sm">
           <Image
             src={addUserIcon}
             alt="Add user button"
@@ -188,6 +188,7 @@ const WatchlistListMenuBar = ({
         <Modal
           isOpen={handleFriendsIsOpen}
           onOpenChange={handleFriendsOnOpenChange}
+          disableAnimation
         >
           <ModalContent>
             {(onClose) => (

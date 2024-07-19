@@ -167,7 +167,7 @@ const AddWatchlistListItemBar = ({
         omdbRes.map((i, k) => (
           <div
             key={k}
-            className="flex flex-grow pl-2 pr-2 pb-2 m-4 bg-yellow-100 bg-opacity-50"
+            className="flex flex-grow pl-2 pr-2 m-0 bg-yellow-100 bg-opacity-50"
           >
             <Link onPress={() => setSubmitNewListItem(i)}>
               <User
