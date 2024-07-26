@@ -75,7 +75,9 @@ const WatchlistListMenuBar = ({
     error: usersError,
     isLoading: usersIsLoading,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_URL}/api/watchlist/${watchlistId}/find-users`,
+    user.email !== "dummy"
+      ? `${process.env.NEXT_PUBLIC_URL}/api/watchlist/${watchlistId}/find-users`
+      : null,
     fetcher,
     { refreshInterval: 2000 }
   );
@@ -90,7 +92,9 @@ const WatchlistListMenuBar = ({
     error: friendsError,
     isLoading: friendsIsLoading,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_URL}/api/friend/find-friends/${user.email}`,
+    user.email !== "dummy"
+      ? `${process.env.NEXT_PUBLIC_URL}/api/friend/find-friends/${user.email}`
+      : null,
     fetcher,
     { refreshInterval: 2000 }
   );
@@ -197,83 +201,94 @@ const WatchlistListMenuBar = ({
                   Add or remove a friends from this list.
                 </ModalHeader>
                 <ModalBody>
-                  {usersIsLoading && <Loading />}
-                  {usersError && <div>Error fetching users for this list.</div>}
-                  {listUsers && listUsers.length > 0 && (
-                    <Listbox selectionMode="none">
-                      {listUsers.map((i, k) => (
-                        <ListboxItem
-                          key={k}
-                          endContent={
-                            <>
-                              {i.role !== "owner" && (
-                                <Button
-                                  isIconOnly
-                                  isLoading={removeUser === i.email}
-                                  onPress={() => {
-                                    console.log("removing user");
-                                    setRemoveUser(i.email);
-                                  }}
-                                >
-                                  <Image
-                                    src={deleteIcon}
-                                    width={15}
-                                    height={15}
-                                    alt="Delete user from list"
-                                  />
-                                </Button>
-                              )}
-                            </>
-                          }
-                        >
-                          <User
-                            name={i.name}
-                            description={i.email}
-                            avatarProps={{ src: i.image }}
-                          />
-                        </ListboxItem>
-                      ))}
-                    </Listbox>
-                  )}
-                  <div>Add users</div>
-                  {friendsIsLoading ? (
-                    <Loading />
-                  ) : friendsError ? (
-                    <div>Error fetching friends.</div>
+                  {user.email === "dummy" ? (
+                    <div>
+                      This functionality is only available to registered users.
+                    </div>
                   ) : (
-                    listFriends &&
-                    listFriends.length > 0 && (
-                      <Listbox selectionMode="none">
-                        {listFriends.map((i, k) => (
-                          <ListboxItem
-                            key={k}
-                            endContent={
-                              <Button
-                                isIconOnly
-                                isLoading={addUser === i.email}
-                                onPress={() => {
-                                  console.log("adding user");
-                                  setAddUser(i.email);
-                                }}
+                    <>
+                      {usersIsLoading && <Loading />}
+                      {usersError && (
+                        <div>Error fetching users for this list.</div>
+                      )}
+                      {listUsers && listUsers.length > 0 && (
+                        <Listbox selectionMode="none">
+                          {listUsers.map((i, k) => (
+                            <ListboxItem
+                              key={k}
+                              endContent={
+                                <>
+                                  {i.role !== "owner" && (
+                                    <Button
+                                      isIconOnly
+                                      isLoading={removeUser === i.email}
+                                      onPress={() => {
+                                        console.log("removing user");
+                                        setRemoveUser(i.email);
+                                      }}
+                                    >
+                                      <Image
+                                        src={deleteIcon}
+                                        width={15}
+                                        height={15}
+                                        alt="Delete user from list"
+                                      />
+                                    </Button>
+                                  )}
+                                </>
+                              }
+                            >
+                              <User
+                                name={i.name}
+                                description={i.email}
+                                avatarProps={{ src: i.image }}
+                              />
+                            </ListboxItem>
+                          ))}
+                        </Listbox>
+                      )}
+                      <div>Add users</div>
+
+                      {friendsIsLoading ? (
+                        <Loading />
+                      ) : friendsError ? (
+                        <div>Error fetching friends.</div>
+                      ) : (
+                        listFriends &&
+                        listFriends.length > 0 && (
+                          <Listbox selectionMode="none">
+                            {listFriends.map((i, k) => (
+                              <ListboxItem
+                                key={k}
+                                endContent={
+                                  <Button
+                                    isIconOnly
+                                    isLoading={addUser === i.email}
+                                    onPress={() => {
+                                      console.log("adding user");
+                                      setAddUser(i.email);
+                                    }}
+                                  >
+                                    <Image
+                                      src={addUserIcon}
+                                      width={15}
+                                      height={15}
+                                      alt="Add user to list"
+                                    />
+                                  </Button>
+                                }
                               >
-                                <Image
-                                  src={addUserIcon}
-                                  width={15}
-                                  height={15}
-                                  alt="Add user to list"
+                                <User
+                                  name={i.name}
+                                  description={i.email}
+                                  avatarProps={{ src: i.image }}
                                 />
-                              </Button>
-                            }
-                          >
-                            <User
-                              name={i.name}
-                              description={i.email}
-                              avatarProps={{ src: i.image }}
-                            />
-                          </ListboxItem>
-                        ))}
-                      </Listbox>
-                    )
+                              </ListboxItem>
+                            ))}
+                          </Listbox>
+                        )
+                      )}
+                    </>
                   )}
                 </ModalBody>
                 <ModalFooter>
