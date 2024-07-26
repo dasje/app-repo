@@ -14,13 +14,13 @@ import {
 import Image from "next/image";
 import deleteIcon from "@/app/lib/icons/icons8-delete-120.png";
 import { WatchlistContentTable } from "@/app/database/types";
-import { removeWatchlistItemHandler } from "@/app/lib/handlers/watchlist_handlers/removeWatchlistItemHandler";
-import { updateWatchlistItemStatusHandler } from "@/app/lib/handlers/watchlist_handlers/updateWatchlistItemStatusHandler";
 import WatchlistListMenuBar from "./WatchlistListMenuBar";
 import AddWatchlistListItemBar from "./AddWatchlistListItemBar";
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "@/app/lib/handlers/swrFetcher";
 import { ListboxWrapper } from "@/app/components/layoutComponents/ListboxWrapper";
+import { removeWatchlistItemHandler } from "../handlers/removeWatchlistItemHandler";
+import { updateWatchlistItemStatusHandler } from "../handlers/updateWatchlistItemStatusHandler";
 
 interface WatchlistInterface {
   user: UserType;
@@ -47,7 +47,9 @@ const Watchlist = ({
   const { mutate } = useSWRConfig();
 
   const { data, error, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_URL}/api/watchlist/watchlist-items/${watchlistId}`,
+    user.email !== "dummy"
+      ? `${process.env.NEXT_PUBLIC_URL}/api/watchlist/watchlist-items/${watchlistId}`
+      : null,
     fetcher,
     { refreshInterval: 500 }
   );
@@ -76,15 +78,32 @@ const Watchlist = ({
           setFetchListValues={setFetchListValues}
           showSearchBox={showSearchBox}
           setShowSearchBox={setShowSearchBox}
+          watchlistContent={watchlistContent}
+          setWatchlistContent={setWatchlistContent}
         />
       )}
     </>
   );
 
   const removeListItem = (itemId: string) => {
-    removeWatchlistItemHandler({ itemId }).then(
-      (res) => res.message === "success" && setFetchListValues(!fetchListValues)
-    );
+    if (user.email === "dummy") {
+      setWatchlistContent(watchlistContent.filter((i) => i.id !== itemId));
+    } else {
+      removeWatchlistItemHandler({ itemId }).then(
+        (res) =>
+          res.message === "success" && setFetchListValues(!fetchListValues)
+      );
+    }
+  };
+
+  const updateDummySelection = (itemId: string) => {
+    const newContent = watchlistContent.map((item) => {
+      if (item.id === itemId) {
+        return { ...item, watched: item.watched === 0 ? 1 : 0 };
+      }
+      return item;
+    });
+    setWatchlistContent(newContent);
   };
 
   return (
@@ -145,13 +164,17 @@ const Watchlist = ({
                             isSelected={item.watched === 1}
                             color={item.watched === 1 ? "success" : "default"}
                             onValueChange={(isSelected) => {
-                              updateWatchlistItemStatusHandler({
-                                itemId: item.id,
-                                watchStatus: isSelected ? 1 : 0,
-                              });
-                              mutate(
-                                `${process.env.NEXT_PUBLIC_URL}/api/watchlist/watchlist-items/${watchlistId}`
-                              );
+                              if (user.email === "dummy") {
+                                updateDummySelection(item.id);
+                              } else {
+                                updateWatchlistItemStatusHandler({
+                                  itemId: item.id,
+                                  watchStatus: isSelected ? 1 : 0,
+                                });
+                                mutate(
+                                  `${process.env.NEXT_PUBLIC_URL}/api/watchlist/watchlist-items/${watchlistId}`
+                                );
+                              }
                             }}
                           >
                             <div className="w-full flex justify-between gap-2">

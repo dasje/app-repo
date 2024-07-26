@@ -7,7 +7,6 @@ import {
   Button,
   Card,
   User,
-  Link,
   Listbox,
   ListboxItem,
 } from "@nextui-org/react";
@@ -15,12 +14,10 @@ import Image from "next/image";
 import searchIcon from "@/app/lib/icons/icons8-search-100.png";
 import backIcon from "@/app/lib/icons/icons8-enter-90.png";
 import cancelIcon from "@/app/lib/icons/icons8-cancel-100.png";
-import { fetchOMDBDataHandler } from "@/app/lib/handlers/watchlist_handlers/fetchOMDBDataHandler";
-import {
-  OMDBResItem,
-  OMDBResSchema,
-} from "@/app/lib/schemas/watchlist-schemas/omdb-message-schemas";
-import { removeWatchlistItemHandler } from "@/app/lib/handlers/watchlist_handlers/removeWatchlistItemHandler";
+import { OMDBResItem } from "@/app/lib/schemas/watchlist-schemas/omdb-message-schemas";
+import { fetchOMDBDataHandler } from "../handlers/fetchOMDBDataHandler";
+import { removeWatchlistItemHandler } from "../handlers/removeWatchlistItemHandler";
+import { WatchlistContentTable } from "@/app/database/types";
 
 interface AddWatchlistListItemBarInterface {
   user: UserType;
@@ -29,6 +26,8 @@ interface AddWatchlistListItemBarInterface {
   setFetchListValues: Dispatch<SetStateAction<boolean>>;
   showSearchBox: boolean;
   setShowSearchBox: Dispatch<SetStateAction<boolean>>;
+  watchlistContent?: WatchlistContentTable[];
+  setWatchlistContent?: Dispatch<SetStateAction<WatchlistContentTable[]>>;
 }
 
 const AddWatchlistListItemBar = ({
@@ -38,6 +37,8 @@ const AddWatchlistListItemBar = ({
   setFetchListValues,
   showSearchBox,
   setShowSearchBox,
+  watchlistContent,
+  setWatchlistContent,
 }: AddWatchlistListItemBarInterface) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [omdbRes, setOmdbRes] = useState<OMDBResItem[] | null>();
@@ -50,44 +51,63 @@ const AddWatchlistListItemBar = ({
     const submitListAddition = async () => {
       let item;
       if (omdbRes) {
-        item = {
-          watchlistId: watchlistId,
-          userEmail: user.email,
-          mediaName: submitNewListItem.Title,
-          year: submitNewListItem.Year,
-          //   rated: submitNewListItem.Rated,
-          //   released: submitNewListItem.Released,
-          //   runtime: submitNewListItem.Runtime,
-          //   genre: submitNewListItem.Genre,
-          //   director: submitNewListItem.Director,
-          //   writer: submitNewListItem.Writer,
-          //   plot: submitNewListItem.Plot,
-          //   language: submitNewListItem.Language,
-          //   country: submitNewListItem.Country,
-          //   awards: submitNewListItem.Awards,
-          poster: submitNewListItem.Poster,
-          imdbId: submitNewListItem.imdbID,
-        };
-        await fetch(
-          process.env.NEXT_PUBLIC_URL + "/api/watchlist/add-watchlist-item",
-          {
-            method: "POST",
-            body: JSON.stringify(item),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        ).then(async (res) => {
-          if (res.status !== 201) {
-            console.log("Error caught");
-          } else {
-            setFetchListValues(!fetchListValues);
-            // setSearchValue("");
-            // setOmdbRes(undefined);
-            // setSearchForTitle(!searchForTitle);
-            setSubmitNewListItem(undefined);
-          }
-        });
+        if (user.email === "dummy") {
+          const newDummyItem: WatchlistContentTable = {
+            id: (watchlistContent.length + 1).toString(),
+            user_id: "dummy",
+            watchlist_id: watchlistId,
+            watched: 0,
+            media_name: submitNewListItem.Title,
+            year: submitNewListItem.Year,
+            poster: submitNewListItem.Poster,
+            imdb_id: submitNewListItem.imdbID,
+          };
+          setWatchlistContent([...watchlistContent, newDummyItem]);
+          setFetchListValues(!fetchListValues);
+          // setSearchValue("");
+          // setOmdbRes(undefined);
+          // setSearchForTitle(!searchForTitle);
+          setSubmitNewListItem(undefined);
+        } else {
+          item = {
+            watchlistId: watchlistId,
+            userEmail: user.email,
+            mediaName: submitNewListItem.Title,
+            year: submitNewListItem.Year,
+            //   rated: submitNewListItem.Rated,
+            //   released: submitNewListItem.Released,
+            //   runtime: submitNewListItem.Runtime,
+            //   genre: submitNewListItem.Genre,
+            //   director: submitNewListItem.Director,
+            //   writer: submitNewListItem.Writer,
+            //   plot: submitNewListItem.Plot,
+            //   language: submitNewListItem.Language,
+            //   country: submitNewListItem.Country,
+            //   awards: submitNewListItem.Awards,
+            poster: submitNewListItem.Poster,
+            imdbId: submitNewListItem.imdbID,
+          };
+          await fetch(
+            process.env.NEXT_PUBLIC_URL + "/api/watchlist/add-watchlist-item",
+            {
+              method: "POST",
+              body: JSON.stringify(item),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          ).then(async (res) => {
+            if (res.status !== 201) {
+              console.log("Error caught");
+            } else {
+              setFetchListValues(!fetchListValues);
+              // setSearchValue("");
+              // setOmdbRes(undefined);
+              // setSearchForTitle(!searchForTitle);
+              setSubmitNewListItem(undefined);
+            }
+          });
+        }
       }
     };
     submitNewListItem && submitListAddition();
