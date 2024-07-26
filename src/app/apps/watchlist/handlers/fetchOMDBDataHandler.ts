@@ -1,8 +1,9 @@
 "use server";
+
 import {
   findByNameSchema,
   findMediaByNameSchema,
-} from "../../schemas/watchlist-schemas/omdb-message-schemas";
+} from "@/app/lib/schemas/watchlist-schemas/omdb-message-schemas";
 
 export const fetchOMDBDataHandler = async (titleReq: findByNameSchema) => {
   try {
