@@ -3,7 +3,8 @@
 import { getUser } from "@/app/lib/handlers/auth_handlers/getUser";
 import AvailableWatchlists from "./components/AvailableWatchlists";
 import AddWatchlist from "./components/AddWatchlist";
-import ChooseLoginSignup from "@/app/login/loginComponents/ChooseLoginSignup";
+import LoginOrSignUpBanner from "@/app/login/loginComponents/LoginOrSignUpBanner";
+import DummyPage from "./components/DummyPage";
 
 export default async function Page() {
   const user = await getUser();
@@ -11,12 +12,10 @@ export default async function Page() {
   return (
     <>
       {!user ? (
-        <div className="m-6 rounded bg-white flex flex-grow justify-center">
-          <div className="font-bold text-3xl text-center grid-cols-4">
-            <ChooseLoginSignup textToDisplay="Please log in or sign up to access the Watchlistography application." />
-            <div className="col-span-4 self-center"></div>
-          </div>
-        </div>
+        <>
+          <LoginOrSignUpBanner textToDisplay="This is a demo version of this application." />
+          <DummyPage />
+        </>
       ) : (
         <div>
           <AddWatchlist user={user} />

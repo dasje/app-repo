@@ -3,37 +3,58 @@
 import Image from "next/image";
 import addIcon from "@/app/lib/icons/icons8-add-100.png";
 import addIconOutline from "@/app/lib/icons/icons8-add-100-outline.png";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/react";
 import { UserType } from "@/app/lib/handlers/auth_handlers/getUser";
 import { useRouter } from "next/navigation";
 import { ListboxWrapper } from "@/app/components/layoutComponents/ListboxWrapper";
+import { watchlistResponse, watchlistType } from "../schemas/watchlistResponse";
 
 interface AddWatchlistInterface {
   user: UserType;
+  dummyList?: watchlistResponse;
+  setDummyList?: Dispatch<SetStateAction<watchlistResponse>>;
 }
 
-const AddWatchlist = ({ user }: AddWatchlistInterface) => {
+const AddWatchlist = ({
+  user,
+  dummyList,
+  setDummyList,
+}: AddWatchlistInterface) => {
   const router = useRouter();
   const [showCover, setShowCover] = useState<boolean>(true);
   const [onHoverIcon, setOnHoverIcon] = useState<boolean>(false);
   const [newListName, setNewListName] = useState<string>("");
 
   const handleAddButton = async () => {
-    const formData = { watchlistName: newListName, userEmail: user.email };
     let x;
     try {
-      x = await fetch(
-        process.env.NEXT_PUBLIC_URL + "/api/watchlist/add-new-watchlist",
-        {
-          method: "POST",
-          body: JSON.stringify(formData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      if (user.email === "dummy") {
+        const newDummyList: watchlistType = {
+          id: (dummyList.length + 1).toString(),
+          watchlist_id: (dummyList.length + 1).toString(),
+          user_id: "dummy",
+          name: newListName,
+          created_at: Date(),
+          created_by: "dummy",
+          role: "owner",
+        };
+        setDummyList([...dummyList, newDummyList]);
+      } else {
+        const formData = { watchlistName: newListName, userEmail: user.email };
+
+        x = await fetch(
+          process.env.NEXT_PUBLIC_URL + "/api/watchlist/add-new-watchlist",
+          {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
     } catch (error: any) {
       console.log(error);
     } finally {
