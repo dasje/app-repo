@@ -77,7 +77,7 @@ const Login = ({
   const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <Button color="primary" onPress={onOpen} variant="faded">
+      <Button color="primary" onClick={onOpen} variant="faded">
         Login
       </Button>
       <Modal
@@ -88,6 +88,7 @@ const Login = ({
         closeButton={hasCloseButton}
         isKeyboardDismissDisabled={true}
         backdrop="blur"
+        placement="center"
       >
         <ModalContent>
           <ModalHeader>
