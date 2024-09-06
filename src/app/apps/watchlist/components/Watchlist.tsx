@@ -10,6 +10,8 @@ import {
   Modal,
   ModalContent,
   User,
+  ModalHeader,
+  ModalBody,
 } from "@nextui-org/react";
 import Image from "next/image";
 import deleteIcon from "@/app/lib/icons/icons8-delete-120.png";
@@ -127,12 +129,13 @@ const Watchlist = ({
             placement="top-center"
             hideCloseButton={true}
             size="lg"
+            scrollBehavior="inside"
           >
             <ModalContent>
               {(onClose) => (
                 <>
-                  {addContent}
-                  <ListboxWrapper owner={false}>
+                  <ModalHeader>{addContent}</ModalHeader>
+                  <ModalBody>
                     <Listbox
                       classNames={{
                         base: "w-full",
@@ -188,7 +191,7 @@ const Watchlist = ({
                         </ListboxItem>
                       )}
                     </Listbox>
-                  </ListboxWrapper>
+                  </ModalBody>
                 </>
               )}
             </ModalContent>
