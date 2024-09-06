@@ -96,6 +96,19 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
+    .createTable("password_reset")
+    .ifNotExists()
+    .addColumn("id", "varchar(255)", (col) =>
+      col.primaryKey().defaultTo(sql`UUID()`)
+    )
+    .addColumn("user_email", "text", (col) => col.notNull())
+    .addColumn("request_code", "text", (col) => col.notNull())
+    .addColumn("created_at", "text", (col) =>
+      col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+    )
+    .execute();
+
+  await db.schema
     .createTable("apps")
     .ifNotExists()
     .addColumn("id", "varchar(255)", (col) =>
