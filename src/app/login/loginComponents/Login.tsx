@@ -74,6 +74,11 @@ const Login = ({
     }
   };
 
+  const handleForgotPasswordButtonClick = () => {
+    router.push("/login/forgot-password");
+    onOpenChange();
+  };
+
   const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
@@ -156,6 +161,14 @@ const Login = ({
             <Divider />
           </ModalBody>
           <ModalFooter className="gap-4">
+            <Button
+              radius="full"
+              color="secondary"
+              variant="ghost"
+              onPress={handleForgotPasswordButtonClick}
+            >
+              Forgot password
+            </Button>
             <Button
               radius="full"
               color="primary"

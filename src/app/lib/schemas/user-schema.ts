@@ -86,3 +86,24 @@ export const inviteFriendSchema = object({
 });
 
 export type InviteFriend = TypeOf<typeof inviteFriendSchema>;
+
+export const forgotPasswordSchema = object({
+  userEmail: string({ required_error: "User email is required" })
+    .min(1, "User email is required")
+    .optional(),
+});
+
+export type ForgotPassword = TypeOf<typeof forgotPasswordSchema>;
+
+export const resetPasswordSchema = object({
+  userEmail: string({ required_error: "User email is required" }).min(
+    1,
+    "User email is required"
+  ),
+  newPassword: string({ required_error: "New password is required" }).min(
+    1,
+    "New password is required"
+  ),
+});
+
+export type ResetPassword = TypeOf<typeof resetPasswordSchema>;

@@ -23,7 +23,11 @@ export async function findUser(criteria: Partial<User>) {
 }
 
 export async function updateUser(id: string, updateWith: UpdateUser) {
-  await db.updateTable("User").set(updateWith).where("id", "=", id).execute();
+  const result = await db
+    .updateTable("User")
+    .set(updateWith)
+    .where("id", "=", id)
+    .executeTakeFirst();
 }
 
 export async function createUser(user: NewUser) {
