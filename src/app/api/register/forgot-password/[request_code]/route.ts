@@ -34,5 +34,5 @@ export async function GET(request: Request, context: { params: Params }) {
     return Response.json({ status: 204 });
   }
   console.log("Success in find-password-request route", items);
-  return Response.json({ message: items }, { status: 200 });
+  return Response.json(items, { status: 200 });
 }
