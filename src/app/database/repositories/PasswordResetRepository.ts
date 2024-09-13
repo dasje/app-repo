@@ -32,12 +32,13 @@ export async function findValidPasswordReset(requestCode: string) {
     .selectFrom("password_reset")
     .selectAll()
     .where("request_code", "=", requestCode)
-    .execute();
+    .executeTakeFirst();
 
-  let originalDate = new Date(res[0].created_at.valueOf());
-
-  if ((now.valueOf() - res[0].created_at.valueOf()) / 3600000 < 3) {
-    return res;
+  if (res) {
+    let requestDate = new Date(res.created_at);
+    if ((now.valueOf() - requestDate.valueOf()) / 3600000 < 3) {
+      return res;
+    }
   } else {
     return undefined;
   }
