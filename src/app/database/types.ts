@@ -12,6 +12,7 @@ import { Database } from "@auth/kysely-adapter";
 export interface DB extends Database {
   User: UserTable;
   user_connections: UserConnectionsTable;
+  password_reset: PasswordResetTable;
   //   Account: AccountTable;
   //   Session: SessionTable;
   //   VerificationToken: VerificationTokenTable;
@@ -35,6 +36,16 @@ export interface UserConnectionsTable {
 export type UserConnection = Selectable<UserConnectionsTable>;
 export type NewUserConnection = Insertable<UserConnectionsTable>;
 export type UpdateUserConnection = Updateable<UserConnectionsTable>;
+
+export interface PasswordResetTable {
+  id: string;
+  user_email: string;
+  request_code: string;
+  created_at: ColumnType<Date, string | undefined>;
+}
+export type PasswordReset = Selectable<PasswordResetTable>;
+export type NewPasswordReset = Insertable<PasswordResetTable>;
+export type UpdatePasswordReset = Updateable<PasswordResetTable>;
 
 export interface UserTable {
   id: string;
