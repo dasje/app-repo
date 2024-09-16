@@ -10,6 +10,7 @@ import ChooseLoginSignup from "../login/loginComponents/ChooseLoginSignup";
 import useSWR from "swr";
 import { fetcher } from "../lib/handlers/swrFetcher";
 import Loading from "./loading";
+import FriendsList from "../components/friendsComponents/FriendsList";
 
 export default function Page() {
   const [user, setUser] = useState<UserType>();
@@ -59,7 +60,6 @@ export default function Page() {
   );
 
   useEffect(() => {
-    console.log("HEHE", allAppsData);
     allAppsData && setApps(allAppsData);
   }, [allAppsData]);
 
@@ -93,22 +93,27 @@ export default function Page() {
       {fetchingUser && <Loading />}
       {!fetchingUser && user && (
         <>
-          <div className="m-6 rounded bg-white flex flex-grow justify-center">
-            <div className="font-bold text-3xl text-center grid-cols-4">
-              <div className="col-span-4 self-center">Welcome {user.name}!</div>
+          <div className="self-center font-bold text-3xl text-center">
+            Welcome {user.name}!
+          </div>
+          <div className="md:flex items-center justify-center">
+            <div className="m-6 md:m-0 rounded justify-center bg-white flex md:items-start">
               {userAppsIsLoading && <Loading />}
               {userAppsData && (
                 <UserAppDashboard appsRes={userApps && userApps} user={user} />
               )}
+            </div>
+            <div className="m-6 md:m-0 rounded justify-center bg-white flex md:items-start">
+              <FriendsList user={user} />
             </div>
           </div>
           {/* <Divider /> */}
           <div className="m-6 rounded bg-white flex flex-grow justify-center">
             {allAppsIsLoading && <Loading />}
             {allAppsError && <div>Error fetching applications</div>}
-            {appsRes && (
+            {allAppsData && (
               <AppDashboard
-                appsRes={appsRes}
+                appsRes={allAppsData}
                 user={user}
                 triggerUserAppRefresh={setTriggerRefreshUserApps}
               />

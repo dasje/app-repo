@@ -15,6 +15,7 @@ const AppDashboard = ({
   user,
   triggerUserAppRefresh,
 }: AppDashboardInterface) => {
+  console.log(appsRes);
   return (
     <>
       <div className="font-bold text-3xl text-center">
@@ -25,7 +26,7 @@ const AppDashboard = ({
             </div>
             <Divider />
 
-            <div className="container min-w-screen max-h-80 overflow-y-hidden overflow-y-scroll scrolling-auto scrolling-touch">
+            <div className="container min-w-screen md:max-h-80 md:overflow-x-hidden md:overflow-y-hidden scrolling-auto scrolling-touch">
               <AppBoxWrapper>
                 <div className="grid grid-cols-1 md:grid-cols-6">
                   {appsRes &&
