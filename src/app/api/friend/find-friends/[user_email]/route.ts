@@ -39,6 +39,6 @@ export async function GET(request: Request, context: { params: Params }) {
       { status: 500 }
     );
   }
-  console.log("Success in find-friends route", items);
+  console.log("Success in find-friends route");
   return Response.json({ message: items }, { status: 200 });
 }

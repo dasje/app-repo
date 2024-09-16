@@ -22,7 +22,6 @@ const AddFriendPopover = ({ user }: AddFriendPopoverInterface) => {
   const [friendEmail, setFriendEmail] = useState<string>(undefined);
   const [emailValid, setEmailValid] = useState<boolean>(undefined);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  useEffect(() => console.log("HERE IS THE USER 2", user), []);
 
   useEffect(() => {
     const submitEmail = async () => {
