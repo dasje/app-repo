@@ -36,8 +36,32 @@ let dummyDataArray: ExpenseRowType[] = [
   },
 ];
 
+let dummyIncome: IncomeRowType[] = [
+  {
+    id: uuidv4(),
+    expense_sheet_id: "dummy",
+    value: 100,
+    periodicity: "monthly",
+    due_date: new Date(),
+    source: "work",
+    active: 1,
+    deleted: 0,
+  },
+  {
+    id: uuidv4(),
+    expense_sheet_id: "dummy",
+    value: 2,
+    periodicity: "monthly",
+    due_date: new Date(),
+    source: "pocket money",
+    active: 1,
+    deleted: 0,
+  },
+];
+
 export default function Page() {
   const [data, setData] = useState<ExpenseRowType[]>(dummyDataArray);
+  const [incomeData, setIncomeData] = useState<IncomeRowType[]>(dummyIncome);
 
   //   const handleNewExpense = (newExpense: ExpenseRowType) => {
   //     setData((data) => [newExpense, ...data]);
@@ -194,7 +218,7 @@ export default function Page() {
         {generateRows()}
       </Table>
       <NewExpense expenseSheetId="dummy" data={data} setData={setData} />
-      <Income />
+      <Income income={incomeData} setIncome={setIncomeData} />
     </>
   );
 }
